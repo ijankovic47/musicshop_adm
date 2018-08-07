@@ -1,5 +1,8 @@
 package com.musicshop.rest;
 
-public interface GenericDao {
+import java.util.List;
 
+public interface GenericDao<T, PK> {
+
+	List<T> readAll();
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.musicshop.rest.GenericDao;
 
-public interface TypeDao extends GenericDao{
+public interface TypeDao extends GenericDao<Type, Integer>{
 
-	List<Type> readAll();
+	List<Type> read(Integer familyId);
 }

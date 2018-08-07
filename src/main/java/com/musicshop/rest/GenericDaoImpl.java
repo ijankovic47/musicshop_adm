@@ -2,32 +2,34 @@ package com.musicshop.rest;
 
 import java.net.URI;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-public abstract class GenericDaoImpl<T,PK> implements GenericDao {
+public abstract class GenericDaoImpl<T, PK> implements GenericDao<T, PK> {
 
 	@Value("${musicshop.api.url}")
-	private String musicshopApiUrl;
+	protected URI musicshopApiUrl;
 	@Autowired
 	protected RestTemplate restTemplate;
-	protected URI apiPath;
+	protected String apiPath;
 	private Class<T> type;
 
 	public GenericDaoImpl(String apiPath, Class<T> type) {
-		this.apiPath = UriComponentsBuilder.fromPath(musicshopApiUrl).path(apiPath).build().toUri();
 		this.type = type;
-		System.out.println(apiPath);
+		this.apiPath=apiPath;
 	}
 
 	public List<T> readAll() {
 
-		ResponseEntity<?> response = restTemplate.getForEntity(apiPath, type);
-		System.out.println(response.getBody());
-		return null;
+		ResponseEntity<?> response = restTemplate.getForEntity(buildURI(), List.class);
+		List<T> result=(List<T>) response.getBody();
+		return result;
+	}
+
+	protected URI buildURI() {
+		return UriComponentsBuilder.fromUri(this.musicshopApiUrl).path(this.apiPath).build().toUri();
 	}
 }
