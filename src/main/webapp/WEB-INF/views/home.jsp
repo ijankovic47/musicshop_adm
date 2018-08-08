@@ -42,7 +42,7 @@
 	
 	<ul>
 	<c:forEach items="${families}" var="family">
-	<li><a href="<c:url value='/types?familyId=${family.id}'/>"> ${family.name} (${family.instrumentCount })</a></li>
+	<li><a href="<c:url value='/instruments?familyId=${family.id}'/>"> ${family.name} (${family.instrumentCount })</a></li>
 	</c:forEach>
 	</ul>
 	

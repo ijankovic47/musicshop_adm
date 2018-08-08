@@ -37,5 +37,10 @@
 <li><a href="<c:url value='/instruments?brandId=${brand.id}${brandFilter}'/>">${brand.name} (${brand.instrumentCount})</a></li>
 </c:forEach>
 </ul>
+<ol>
+<c:forEach items="${instruments}" var="instrument">
+<li><a href="<c:url value='/instruments?brandId=${brand.id}${brandFilter}'/>">${instrument.name} (${instrument.price})</a></li>
+</c:forEach>
+</ol>
 </body>
 </html>

@@ -9,19 +9,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.musicshop.rest.GenericDaoImpl;
 
 @Repository
-public class BrandDaoImpl extends GenericDaoImpl<Brand, Integer> implements BrandDao{
+public class BrandDaoImpl extends GenericDaoImpl<Brand, Integer> implements BrandDao {
 
 	public BrandDaoImpl() {
 		super("/brand", Brand.class);
 	}
 
 	@Override
-	public List<Brand> read(Integer familyId, Integer typeId) {
-		
-		UriComponentsBuilder uri=UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("familyId", familyId).queryParam("typeId", typeId);
+	public List<Brand> read(Integer familyId, Integer typeId, Integer propertyId) {
+
+		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString())
+				.queryParam("familyId", familyId).queryParam("typeId", typeId).queryParam("propertyId", propertyId);
 		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), List.class);
-		List<Brand> result=(List<Brand>) response.getBody();
-		
+		List<Brand> result = (List<Brand>) response.getBody();
+
 		return result;
 	}
 
