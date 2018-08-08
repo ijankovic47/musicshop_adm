@@ -19,7 +19,22 @@
 
 <ul>
 <c:forEach items="${families}" var="family">
-<li> ${family.name} (${family.instrumentCount})</li>
+<li><a href="<c:url value='/instruments?familyId=${family.id}${filter}'/>"> ${family.name} (${family.instrumentCount})</a></li>
+</c:forEach>
+</ul>
+<ul>
+<c:forEach items="${types}" var="type">
+<li><a href="<c:url value='/instruments?typeId=${type.id}${filter}'/>"> ${type.name} (${type.instrumentCount})</a></li>
+</c:forEach>
+</ul>
+<ul>
+<c:forEach items="${properties}" var="property">
+<li> <a href="<c:url value='/instruments?propertyId=${property.id}${filter}'/>">${property.name} (${property.instrumentCount})</a></li>
+</c:forEach>
+</ul>
+<ul>
+<c:forEach items="${brands}" var="brand">
+<li><a href="<c:url value='/instruments?brandId=${brand.id}${brandFilter}'/>">${brand.name} (${brand.instrumentCount})</a></li>
 </c:forEach>
 </ul>
 </body>

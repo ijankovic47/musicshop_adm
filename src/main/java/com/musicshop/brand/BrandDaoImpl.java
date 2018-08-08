@@ -16,9 +16,9 @@ public class BrandDaoImpl extends GenericDaoImpl<Brand, Integer> implements Bran
 	}
 
 	@Override
-	public List<Brand> read(Integer familyId) {
+	public List<Brand> read(Integer familyId, Integer typeId) {
 		
-		UriComponentsBuilder uri=UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("familyId", familyId);
+		UriComponentsBuilder uri=UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("familyId", familyId).queryParam("typeId", typeId);
 		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), List.class);
 		List<Brand> result=(List<Brand>) response.getBody();
 		

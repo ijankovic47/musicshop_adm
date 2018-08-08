@@ -18,12 +18,12 @@
 <body>
 	<ul>
 		<c:forEach items="${types}" var="type">
-			<li><a>${type.name} (${type.instrumentCount})</a></li>
+			<li><a href="<c:url value='/instruments?typeId=${type.id}'/>">${type.name} (${type.instrumentCount})</a></li>
 		</c:forEach>
 	</ul>
 	<ul>
 		<c:forEach items="${brands}" var="brand">
-			<li><a> ${brand.name} (${brand.instrumentCount}) </a></li>
+			<li><a href="<c:url value='/instruments?familyId=${familyId}&brandId=${brand.id}'/>"> ${brand.name} (${brand.instrumentCount}) </a></li>
 		</c:forEach>
 	</ul>
 </body>

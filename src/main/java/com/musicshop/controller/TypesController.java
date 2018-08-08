@@ -23,8 +23,9 @@ public class TypesController {
 	@RequestMapping
 	public String showTypes(@RequestParam(name="familyId", required=true) Integer familyId, Model model) {
 
+		model.addAttribute("familyId", familyId);
 		model.addAttribute("types", typeDao.read(familyId));
-		model.addAttribute("brands", brandDao.read(familyId));
+		model.addAttribute("brands", brandDao.read(familyId, null));
 		return "types";
 	}
 }
