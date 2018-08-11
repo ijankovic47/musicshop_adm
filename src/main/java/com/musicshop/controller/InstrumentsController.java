@@ -43,7 +43,7 @@ public class InstrumentsController {
 			@RequestParam(name = "typeId", required = false) Integer typeId,
 			@RequestParam(name = "propertyId", required = false) Integer propertyId,
 			@RequestParam(name = "brandId", required = false) Integer brandId,
-			@RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
+			@RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize,
 			@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
 			@RequestParam(name = "priceMin", required = false) Integer priceMin,
 			@RequestParam(name = "priceMax", required = false) Integer priceMax, Model model) {
@@ -55,21 +55,19 @@ public class InstrumentsController {
 		String pricesFilter = (priceMin != null ? "&priceMin=" + priceMin : "")
 				+ (priceMax != null ? "&priceMax=" + priceMax : "");
 		String brandFilter = (brandId != null ? "&brandId=" + brandId : "");
-		String filterForBrand=(familyId!=null?"&familyId="+familyId:"")+
-				(typeId!=null?"&typeId="+typeId:"")+
-				(propertyId!=null?"&propertyId="+propertyId:"")+
-				(priceMin!=null?"&priceMin="+priceMin:"")+
-				(priceMax!=null?"&priceMax="+priceMax:"");
+		String filterForBrand = (familyId != null ? "&familyId=" + familyId : "")
+				+ (typeId != null ? "&typeId=" + typeId : "") + (propertyId != null ? "&propertyId=" + propertyId : "")
+				+ (priceMin != null ? "&priceMin=" + priceMin : "") + (priceMax != null ? "&priceMax=" + priceMax : "");
 
 		model.addAttribute("paginationUrl", paginationUrl);
-		double currency = currencyDao.getRSDforEUR();
+		double RSDforEUR = currencyDao.getRSDforEUR();
+		priceMin = EURtoRSD(priceMin, RSDforEUR);
+		priceMax = EURtoRSD(priceMax, RSDforEUR);
 		List<Instrument> instruments = instrumentDao.read(familyId, typeId, propertyId, brandId, pageSize, pageNumber,
-				(priceMin == null ? 0 : (int) (priceMin * currency)),
-				(priceMax == null ? Integer.MAX_VALUE : (int) (priceMax * currency)));
+				priceMin, priceMax);
 		model.addAttribute("instruments", instruments);
 		List<Double> instrumentPrices = instrumentDao.prices(familyId, typeId, propertyId, brandId,
-				(priceMin == null ? 0 : (int) (priceMin * currency)),
-				(priceMax == null ? Integer.MAX_VALUE : (int) (priceMax * currency)));
+				priceMin, priceMax);
 
 		if (priceMin == null && priceMax == null) {
 			Map<Integer, Integer> priceGroups = createPriceGroups(instrumentPrices);
@@ -84,7 +82,7 @@ public class InstrumentsController {
 		model.addAttribute("pages", pages);
 		model.addAttribute("filter", brandFilter + pricesFilter);
 		model.addAttribute("brandFilter", filterForBrand);
-		
+
 		if (propertyId != null && brandId != null) {
 			return "instruments";
 		}
@@ -93,25 +91,29 @@ public class InstrumentsController {
 			return "instruments";
 		}
 		if (typeId != null && brandId != null) {
-			model.addAttribute("properties", propertyDao.read(typeId, brandId));
+			model.addAttribute("properties", propertyDao.read(typeId, brandId, priceMin, priceMax));
 			return "instruments";
 		}
 		if (typeId != null) {
-			model.addAttribute("properties", propertyDao.read(typeId, null));
-			model.addAttribute("brands", brandDao.read(null, typeId, null, priceMin, priceMax));
+			model.addAttribute("properties", propertyDao.read(typeId, null, priceMin, priceMax));
+			model.addAttribute("brands",
+					brandDao.read(null, typeId, null, priceMin, priceMax));
 			return "instruments";
 		}
 		if (familyId != null && brandId != null) {
-			model.addAttribute("types", typeDao.read(familyId, brandId));
+			model.addAttribute("types",
+					typeDao.read(familyId, brandId, priceMin, priceMax));
 			return "instruments";
 		}
 		if (familyId != null) {
-			model.addAttribute("types", typeDao.read(familyId, brandId));
-			model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax));
+			model.addAttribute("types",
+					typeDao.read(familyId, brandId, priceMin, priceMax));
+			model.addAttribute("brands",
+					brandDao.read(familyId, null, null, priceMin, priceMax));
 			return "instruments";
 		}
 		if (brandId != null) {
-			model.addAttribute("families", familyDao.read(brandId));
+			model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax));
 			return "instruments";
 		}
 		return "instruments";
@@ -146,5 +148,12 @@ public class InstrumentsController {
 			}
 			sortPriceRanges(priceCount, instrumentPrice, breakingAmount);
 		}
+	}
+
+	private Integer EURtoRSD(Integer priceEUR, Double RSDforEUR) {
+		if (priceEUR == null) {
+			return null;
+		}
+		return (int) (priceEUR * RSDforEUR);
 	}
 }

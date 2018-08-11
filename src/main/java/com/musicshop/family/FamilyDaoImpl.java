@@ -10,19 +10,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.musicshop.rest.GenericDaoImpl;
 
 @Repository
-public class FamilyDaoImpl extends GenericDaoImpl<Family, Integer> implements FamilyDao{
+public class FamilyDaoImpl extends GenericDaoImpl<Family, Integer> implements FamilyDao {
 
 	public FamilyDaoImpl() {
 		super("/family", Family.class);
 	}
 
 	@Override
-	public List<Family> read(Integer brandId) {
-		
-		UriComponentsBuilder uri=UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("brandId", brandId);
+	public List<Family> read(Integer brandId, Integer priceMin, Integer priceMax) {
+
+		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString())
+				.queryParam("brandId", brandId).queryParam("priceMin", priceMin).queryParam("priceMax", priceMax);
 		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Family[].class);
-		Family[] result=(Family[]) response.getBody();
-		
+		Family[] result = (Family[]) response.getBody();
+
 		return Arrays.asList(result);
 	}
 

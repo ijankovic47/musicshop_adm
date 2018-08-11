@@ -16,13 +16,13 @@ public class TypeDaoImpl extends GenericDaoImpl<Type, Integer> implements TypeDa
 	}
 
 	@Override
-	public List<Type> read(Integer familyId, Integer brandId) {
+	public List<Type> read(Integer familyId, Integer brandId, Integer priceMin, Integer priceMax) {
 
-		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("familyId",
-				familyId);
-		if (brandId != null) {
-			uri.queryParam("brandId", brandId);
-		}
+		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString())
+				.queryParam("familyId", familyId)
+				.queryParam("brandId", brandId)
+				.queryParam("priceMin", priceMin)
+				.queryParam("priceMax", priceMax);
 		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Type[].class);
 		Type[] result = (Type[]) response.getBody();
 

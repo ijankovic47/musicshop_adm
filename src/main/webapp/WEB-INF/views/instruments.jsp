@@ -16,6 +16,7 @@
 <title>Instruments</title>
 </head>
 <body>
+<a href="<c:url value='/'/>">Home</a>
 
 	<ul>
 		<c:forEach items="${families}" var="family">
@@ -67,7 +68,7 @@
 			<li><c:if test=""></c:if> <c:choose>
 					<c:when test="${entry.key>2000}">
 						<a
-							href="<c:url value='/instruments?${paginationUrl}&priceMin=${previous}&priceMax=${entry.key}'/>">2000
+							href="<c:url value='/instruments?${paginationUrl}&priceMin=2000'/>">2000
 							- MAX EUR ( ${entry.value})</a>
 						<c:set var="previous" value="${entry.key}"></c:set>
 					</c:when>
