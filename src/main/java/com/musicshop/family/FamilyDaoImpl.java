@@ -1,5 +1,6 @@
 package com.musicshop.family;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,10 @@ public class FamilyDaoImpl extends GenericDaoImpl<Family, Integer> implements Fa
 	public List<Family> read(Integer brandId) {
 		
 		UriComponentsBuilder uri=UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("brandId", brandId);
-		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), List.class);
-		List<Family> result=(List<Family>) response.getBody();
+		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Family[].class);
+		Family[] result=(Family[]) response.getBody();
 		
-		return result;
+		return Arrays.asList(result);
 	}
 
 }

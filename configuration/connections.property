@@ -1,1 +1,2 @@
 musicshop.api.url=192.168.1.21:8080
+currency.converter.api=http://free.currencyconverterapi.com/api/v5/convert?q=EUR_RSD&compact=y

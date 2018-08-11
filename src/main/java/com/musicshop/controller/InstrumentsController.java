@@ -1,12 +1,17 @@
 package com.musicshop.controller;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.musicshop.brand.BrandDao;
+import com.musicshop.currency.CurrencyDao;
 import com.musicshop.family.FamilyDao;
+import com.musicshop.instrument.Instrument;
 import com.musicshop.instrument.InstrumentDao;
 import com.musicshop.property.PropertyDao;
 import com.musicshop.type.TypeDao;
@@ -20,59 +25,126 @@ public class InstrumentsController {
 	private TypeDao typeDao;
 	private PropertyDao propertyDao;
 	private InstrumentDao instrumentDao;
+	private CurrencyDao currencyDao;
 
 	@Autowired
-	public InstrumentsController(FamilyDao familyDao, BrandDao brandDao, TypeDao typeDao, PropertyDao propertyDao, InstrumentDao instrumentDao) {
+	public InstrumentsController(FamilyDao familyDao, BrandDao brandDao, TypeDao typeDao, PropertyDao propertyDao,
+			InstrumentDao instrumentDao, CurrencyDao currencyDao) {
 		this.familyDao = familyDao;
 		this.brandDao = brandDao;
 		this.typeDao = typeDao;
 		this.propertyDao = propertyDao;
-		this.instrumentDao=instrumentDao;
+		this.instrumentDao = instrumentDao;
+		this.currencyDao = currencyDao;
 	}
 
 	@RequestMapping
-	public String showInstruments(@RequestParam(name="familyId", required=false)Integer familyId,
-			@RequestParam(name="typeId", required=false)Integer typeId,
-			@RequestParam(name="propertyId", required=false)Integer propertyId,
-			@RequestParam(name="brandId", required=false)Integer brandId, Model model) {
+	public String showInstruments(@RequestParam(name = "familyId", required = false) Integer familyId,
+			@RequestParam(name = "typeId", required = false) Integer typeId,
+			@RequestParam(name = "propertyId", required = false) Integer propertyId,
+			@RequestParam(name = "brandId", required = false) Integer brandId,
+			@RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
+			@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
+			@RequestParam(name = "priceMin", required = false) Integer priceMin,
+			@RequestParam(name = "priceMax", required = false) Integer priceMax, Model model) {
 
-		model.addAttribute("instruments", instrumentDao.read(familyId, typeId, propertyId, brandId));
-		
-		if(brandId!=null) {
-			model.addAttribute("filter", "&brandId="+brandId);
+		String paginationUrl = "&pageSize=" + pageSize + (familyId != null ? "&familyId=" + familyId : "")
+				+ (typeId != null ? "&typeId=" + typeId : "") + (propertyId != null ? "&propertyId=" + propertyId : "")
+				+ (brandId != null ? "&brandId=" + brandId : "") + (priceMin != null ? "&priceMin=" + priceMin : "")
+				+ (priceMax != null ? "&priceMax=" + priceMax : "");
+		String pricesFilter = (priceMin != null ? "&priceMin=" + priceMin : "")
+				+ (priceMax != null ? "&priceMax=" + priceMax : "");
+		String brandFilter = (brandId != null ? "&brandId=" + brandId : "");
+		String filterForBrand=(familyId!=null?"&familyId="+familyId:"")+
+				(typeId!=null?"&typeId="+typeId:"")+
+				(propertyId!=null?"&propertyId="+propertyId:"")+
+				(priceMin!=null?"&priceMin="+priceMin:"")+
+				(priceMax!=null?"&priceMax="+priceMax:"");
+
+		model.addAttribute("paginationUrl", paginationUrl);
+		double currency = currencyDao.getRSDforEUR();
+		List<Instrument> instruments = instrumentDao.read(familyId, typeId, propertyId, brandId, pageSize, pageNumber,
+				(priceMin == null ? 0 : (int) (priceMin * currency)),
+				(priceMax == null ? Integer.MAX_VALUE : (int) (priceMax * currency)));
+		model.addAttribute("instruments", instruments);
+		List<Double> instrumentPrices = instrumentDao.prices(familyId, typeId, propertyId, brandId,
+				(priceMin == null ? 0 : (int) (priceMin * currency)),
+				(priceMax == null ? Integer.MAX_VALUE : (int) (priceMax * currency)));
+
+		if (priceMin == null && priceMax == null) {
+			Map<Integer, Integer> priceGroups = createPriceGroups(instrumentPrices);
+			model.addAttribute("priceGroups", priceGroups);
 		}
+		int instrumentCount = instrumentPrices.size();
+		int pages = 1;
+		if (instrumentCount > 0) {
+			pages = (int) Math.ceil((double) instrumentCount / (double) pageSize);
+		}
+
+		model.addAttribute("pages", pages);
+		model.addAttribute("filter", brandFilter + pricesFilter);
+		model.addAttribute("brandFilter", filterForBrand);
+		
 		if (propertyId != null && brandId != null) {
 			return "instruments";
 		}
 		if (propertyId != null) {
-			model.addAttribute("brands", brandDao.read(null,null, propertyId));
-			model.addAttribute("brandFilter", "&propertyId="+propertyId);
+			model.addAttribute("brands", brandDao.read(null, null, propertyId, priceMin, priceMax));
 			return "instruments";
 		}
 		if (typeId != null && brandId != null) {
-			model.addAttribute("properties", propertyDao.read(typeId,brandId));
+			model.addAttribute("properties", propertyDao.read(typeId, brandId));
 			return "instruments";
 		}
-		if(typeId!=null) {
+		if (typeId != null) {
 			model.addAttribute("properties", propertyDao.read(typeId, null));
-			model.addAttribute("brands", brandDao.read(null, typeId, null));
-			model.addAttribute("brandFilter", "&typeId="+typeId);
+			model.addAttribute("brands", brandDao.read(null, typeId, null, priceMin, priceMax));
 			return "instruments";
 		}
-		if(familyId!=null&&brandId!=null) {
+		if (familyId != null && brandId != null) {
 			model.addAttribute("types", typeDao.read(familyId, brandId));
 			return "instruments";
 		}
-		if(familyId!=null) {
+		if (familyId != null) {
 			model.addAttribute("types", typeDao.read(familyId, brandId));
-			model.addAttribute("brands", brandDao.read(familyId, null, null));
-			model.addAttribute("brandFilter", "&familyId="+familyId);
+			model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax));
 			return "instruments";
 		}
-		if(brandId!=null) {
+		if (brandId != null) {
 			model.addAttribute("families", familyDao.read(brandId));
 			return "instruments";
 		}
 		return "instruments";
+	}
+
+	private Map<Integer, Integer> createPriceGroups(List<Double> instrumentPrices) {
+
+		double RSDforEUR = currencyDao.getRSDforEUR();
+		Map<Integer, Integer> priceCount = new LinkedHashMap<Integer, Integer>();
+
+		for (Double price : instrumentPrices) {
+			sortPriceRanges(priceCount, price / RSDforEUR, 100);
+		}
+		return priceCount;
+	}
+
+	private void sortPriceRanges(Map<Integer, Integer> priceCount, Double instrumentPrice, Integer breakingAmount) {
+
+		if (!priceCount.containsKey(breakingAmount)) {
+			priceCount.put(breakingAmount, 0);
+		}
+		if (instrumentPrice < breakingAmount || breakingAmount > 2000) {
+			priceCount.put(breakingAmount, 1 + priceCount.get(breakingAmount));
+			return;
+		} else {
+			if (breakingAmount < 500) {
+				breakingAmount += 100;
+			} else if (breakingAmount >= 500 && breakingAmount < 1000) {
+				breakingAmount += 250;
+			} else if (breakingAmount >= 1000 && breakingAmount <= 2000) {
+				breakingAmount += 500;
+			}
+			sortPriceRanges(priceCount, instrumentPrice, breakingAmount);
+		}
 	}
 }

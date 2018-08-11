@@ -1,5 +1,6 @@
 package com.musicshop.brand;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,15 @@ public class BrandDaoImpl extends GenericDaoImpl<Brand, Integer> implements Bran
 	}
 
 	@Override
-	public List<Brand> read(Integer familyId, Integer typeId, Integer propertyId) {
+	public List<Brand> read(Integer familyId, Integer typeId, Integer propertyId, Integer priceMin, Integer priceMax) {
 
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString())
-				.queryParam("familyId", familyId).queryParam("typeId", typeId).queryParam("propertyId", propertyId);
-		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), List.class);
-		List<Brand> result = (List<Brand>) response.getBody();
+				.queryParam("familyId", familyId).queryParam("typeId", typeId).queryParam("propertyId", propertyId)
+				.queryParam("priceMin", priceMin).queryParam("priceMax", priceMax);
+		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Brand[].class);
+		Brand[] result = (Brand[]) response.getBody();
 
-		return result;
+		return Arrays.asList(result);
 	}
 
 }

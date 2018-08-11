@@ -1,5 +1,6 @@
 package com.musicshop.type;
 
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -16,14 +17,15 @@ public class TypeDaoImpl extends GenericDaoImpl<Type, Integer> implements TypeDa
 
 	@Override
 	public List<Type> read(Integer familyId, Integer brandId) {
-		
-		UriComponentsBuilder uri=UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("familyId", familyId);
-		if(brandId!=null) {
+
+		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("familyId",
+				familyId);
+		if (brandId != null) {
 			uri.queryParam("brandId", brandId);
 		}
-		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), List.class);
-		List<Type> result=(List<Type>) response.getBody();
-		
-		return result;
+		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Type[].class);
+		Type[] result = (Type[]) response.getBody();
+
+		return Arrays.asList(result);
 	}
 }
