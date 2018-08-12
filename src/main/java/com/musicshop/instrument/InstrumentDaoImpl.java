@@ -40,4 +40,26 @@ public class InstrumentDaoImpl extends GenericDaoImpl<Instrument, Integer> imple
 		return Arrays.asList(result);
 	}
 
+	@Override
+	public Instrument readById(Integer id) {
+	
+		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString()).path("/"+id);
+		ResponseEntity<Instrument> response = restTemplate.getForEntity(uri.toUriString(), Instrument.class);
+		Instrument instrument = response.getBody();
+		return instrument;
+	}
+
+	@Override
+	public List<Instrument> readByIds(List<Integer> ids) {
+		
+		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString());
+		for(Integer id:ids) {
+			uri.queryParam("ids", id);
+		}
+		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Instrument[].class);
+		Instrument[] instruments = (Instrument[]) response.getBody();
+
+		return Arrays.asList(instruments);
+	}
+
 }

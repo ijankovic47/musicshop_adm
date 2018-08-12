@@ -35,7 +35,6 @@ public class RootContextConfiguration implements WebMvcConfigurer {
 	@Bean
 	@SessionScope
 	public ShoppingCart getShoppingCart() {
-		System.out.println(environment.getProperty("musicshop.api.url"));
 		return new ShoppingCart();
 	}
 

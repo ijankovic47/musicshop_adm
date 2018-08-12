@@ -2,39 +2,27 @@ package com.musicshop.shoppingcart;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 public class ShoppingCart {
 
-	private Map<String, Integer> items = new HashMap<>();
+	private Map<Integer, Integer> items = new HashMap<>();
 
-	public void addItem(String itemId) {
+	public void addItem(Integer item, Integer amount) {
 
-		items.putIfAbsent(itemId, 1);
+		items.put(item, amount);
 	}
 
-	public void removeItem(String itemId) {
+	public void removeItem(Integer itemId) {
 
 		items.remove(itemId);
 	}
 	@JsonAnyGetter
-	public Map<String, Integer> getItems() {
+	public Map<Integer, Integer> getItems() {
 		return items;
 	}
 
-	public void setItems(Map<String, Integer> items) {
+	public void setItems(Map<Integer, Integer> items) {
 		this.items = items;
-	}
-	@JsonValue
-	public String toJson() {
-		String result="{";
-		for(Entry<String,Integer> e:items.entrySet()) {
-			result+=",'"+e.getKey()+"':'"+e.getValue()+"'";
-		}
-		result+="}";
-		return result.replaceFirst(",", "");
 	}
 }

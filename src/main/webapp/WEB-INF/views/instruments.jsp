@@ -13,10 +13,120 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
 <meta charset="ISO-8859-1">
+<script type="text/javascript">
+	function addToCart(item, amount) {
+		var data = {};
+		data[item] = amount;
+		$
+				.ajax({
+					url : "http://192.168.1.12:8080/musicshop_adm/shoppingCart/"
+							+ item,
+					type : 'PUT',
+					dataType : 'json',
+					async : true,
+					data : JSON.stringify(data),
+					contentType : 'application/json; charset=utf-8',
+					success : function(data) {
+						loadShoppingCart();
+					},
+					error : function(er, st, msg) {
+						console.log(er);
+						console.log(st);
+						console.log(msg);
+					}
+
+				});
+	}
+	function loadShoppingCart() {
+		loadItems(readInstrumentsByIds);
+	}
+	function loadItems(callBack) {
+		$.ajax({
+			url : "http://192.168.1.12:8080/musicshop_adm/shoppingCart/",
+			type : 'GET',
+			dataType : 'json',
+			async : true,
+			contentType : 'text/plain; charset=utf-8',
+			success : function(data) {
+				if (Object.keys(data).length) {
+					callBack(data, initShoppingCartForm);
+				}
+				else{
+					$("#shoppingCart").html("");
+				}
+			},
+			error : function(er, st, msg) {
+				console.log(er);
+				console.log(st);
+				console.log(msg);
+			}
+
+		});
+	}
+	function readInstrumentsByIds(items, callback) {
+		var url = "/musicshop_adm/instrument?";
+		Object.keys(items).forEach(function(key) {
+			url = url + '&ids=' + key;
+		});
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				callback(items, JSON.parse(xhttp.responseText));
+			}
+		};
+		xhttp.open("GET", url, true);
+		xhttp.send();
+	}
+	function initShoppingCartForm(items, instruments) {
+
+		var outHTML = "<ol>";
+		var totalPrice = 0;
+		for (i = 0; i < instruments.length; i++) {
+			outHTML += "<li><img src='"+instruments[i].images[0]+"' style='height:50px;width:50px;'/>"
+					+ instruments[i].name
+					+ "<input onfocusout='updateShoppingCart(this)' id="
+					+ instruments[i].id
+					+ " value='"
+					+ items[instruments[i].id]
+					+ "'/>"
+					+ items[instruments[i].id]
+					* instruments[i].price
+					+ "<button onclick='removeItemFromCart("+instruments[i].id+")'>remove</button></li>";
+			totalPrice += items[instruments[i].id] * instruments[i].price;
+		}
+		outHTML += "</ol> Total price: " + totalPrice;
+
+		$("#shoppingCart").html(outHTML);
+	}
+	function updateShoppingCart(field) {
+
+		addToCart(field.id, field.value);
+		loadShoppingCart();
+	}
+	
+	function removeItemFromCart(id){
+		$.ajax({
+			url : "http://192.168.1.12:8080/musicshop_adm/shoppingCart/"+id,
+			type : 'DELETE',
+			//dataType : 'json',
+			async : true,
+			//contentType : 'text/plain; charset=utf-8',
+			success : function(data) {
+				loadShoppingCart();
+			},
+			error : function(er, st, msg) {
+				console.log(er);
+				console.log(st);
+				console.log(msg);
+			}
+
+		});
+	}
+</script>
 <title>Instruments</title>
 </head>
 <body>
-<a href="<c:url value='/'/>">Home</a>
+	<a href="<c:url value='/'/>">Home</a>
 
 	<ul>
 		<c:forEach items="${families}" var="family">
@@ -49,10 +159,9 @@
 
 	<ol>
 		<c:forEach items="${instruments}" var="instrument">
-			<li><a
-				href="<c:url value='/instruments?brandId=${brand.id}${brandFilter}'/>">${instrument.name}
+			<li><a href="<c:url value='/instrument/${instrument.id}'/>">${instrument.name}
 					(${instrument.price})</a><img src="${instrument.images[0]}"
-				style="height: 100px; width: 100px"></li>
+				style="height: 100px; width: 100px"></li><button onclick='addToCart("${instrument.id}","1")'>Add to cart</button>
 		</c:forEach>
 	</ol>
 
@@ -81,6 +190,10 @@
 				</c:choose></li>
 		</c:forEach>
 	</ol>
+	<div id="shoppingCart"></div>
+	<script type="text/javascript">
+		loadShoppingCart();
+	</script>
 
 </body>
 </html>

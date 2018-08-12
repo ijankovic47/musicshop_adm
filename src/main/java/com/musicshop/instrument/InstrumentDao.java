@@ -9,4 +9,7 @@ public interface InstrumentDao {
 
 	List<Double> prices(Integer familyId, Integer typeId, Integer propertyId, Integer brandId, Integer priceMin,
 			Integer priceMax);
+	
+	Instrument readById(Integer id);
+	List<Instrument> readByIds(List<Integer> ids);
 }
