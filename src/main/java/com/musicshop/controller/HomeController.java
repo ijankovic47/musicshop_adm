@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.musicshop.brand.BrandDao;
 import com.musicshop.family.FamilyDao;
+import com.musicshop.instrument.Instrument;
 
 @Controller
 @RequestMapping("/")
@@ -25,6 +26,7 @@ public class HomeController {
 		
 		model.addAttribute("families",familyDao.readAll());
 		model.addAttribute("brands", brandDao.readAll());
+		model.addAttribute("instrument", new Instrument());
 		return "home";
 	}
 }

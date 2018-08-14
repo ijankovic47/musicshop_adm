@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,5 +36,11 @@ public class InstrumentController {
 	@ResponseBody
 	public List<Instrument> readByIds(@RequestParam("ids") List<Integer> ids){
 		return instrumentDao.readByIds(ids);
+	}
+	@RequestMapping(method=RequestMethod.POST, consumes="application/json", headers= "content-type=application/x-www-form-urlencoded")
+	public String createInstrument(@ModelAttribute Instrument instrument) {
+		
+		instrumentDao.saveEntity(instrument);
+		return "redirect:/";
 	}
 }

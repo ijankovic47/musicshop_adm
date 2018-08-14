@@ -2,6 +2,8 @@ package com.musicshop.instrument;
 
 import java.util.List;
 
+import com.musicshop.property.Property;
+
 public class Instrument {
 
 	private Integer id;
@@ -10,6 +12,7 @@ public class Instrument {
 	private Integer brandId;
 	private Integer typeId;
 	private List<String> images;
+	private List<Integer> properties;
 	private String video;
 	private double price;
 	
@@ -61,4 +64,11 @@ public class Instrument {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+	public List<Integer> getProperties() {
+		return properties;
+	}
+	public void setProperties(List<Integer> properties) {
+		this.properties = properties;
+	}
+	
 }
