@@ -15,10 +15,14 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
 <script type="text/javascript">
+	var apiUrl;
+	$(function() {
+		loadAPIurl();
+	});
 	function loadTypes(familyId, listId) {
 
 		$.ajax({
-			url : "http://192.168.1.21:8080/musicshop.api/type?familyId="
+			url : apiUrl+"/type?familyId="
 					+ familyId,
 			type : 'GET',
 			dataType : 'json',
@@ -36,18 +40,18 @@
 		});
 	}
 	function initTypeList(types, listId) {
-		$('#'+listId).empty();
-		$('#'+listId).append(
+		$('#' + listId).empty();
+		$('#' + listId).append(
 				'<option disabled selected value> -- select type -- </option>');
 		types.forEach(function(type) {
-			$('#'+listId).append(
+			$('#' + listId).append(
 					'<option value='+type.id+'>' + type.name + '</option>');
 		});
 	}
 	function loadProperties(typeId) {
 
 		$.ajax({
-			url : "http://192.168.1.21:8080/musicshop.api/property?typeId="
+			url : apiUrl+"/property?typeId="
 					+ typeId,
 			type : 'GET',
 			dataType : 'json',
@@ -72,6 +76,24 @@
 							+ '</option>');
 		});
 	}
+	function loadAPIurl() {
+		$.ajax({
+			url : getContextPath() + "/properties",
+			type : 'GET',
+			dataType : 'text',
+			async : false,
+			success : function(url) {
+				apiUrl = url;
+			},
+			error : function(er, st, msg) {
+				console.log(msg);
+			}
+		});
+	}
+	function getContextPath() {
+		return window.location.pathname.substring(0, window.location.pathname
+				.indexOf("/", 2));
+	}
 </script>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -92,7 +114,8 @@
 					<spring:option value="${brand.id}">${brand.name}</spring:option>
 				</c:forEach>
 			</spring:select>
-			Family<select onchange="loadTypes(this.value, 'instrumentTypeSelect')">
+			Family<select
+				onchange="loadTypes(this.value, 'instrumentTypeSelect')">
 				<option disabled selected value="0">-- select family --</option>
 				<c:forEach items="${families}" var="family">
 					<option value="${family.id}">${family.name}</option>
@@ -143,7 +166,7 @@
 			<button type="submit">Submit</button>
 		</spring:form>
 	</div>
-	
+
 	<div id="propertyForm">
 		<h1>Property form</h1>
 		<c:url var="url" value="/admin/property" />

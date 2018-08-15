@@ -17,7 +17,7 @@
 		data[item]=amount;
 		$
 				.ajax({
-					url : "http://192.168.1.12:8080/musicshop_adm/shoppingCart/"
+					url : getContextPath()+"/shoppingCart/"
 							+ item,
 					type : 'PUT',
 					dataType : 'json',
@@ -40,7 +40,7 @@
 	}
 	function loadItems(callBack) {
 		$.ajax({
-			url : "http://192.168.1.12:8080/musicshop_adm/shoppingCart/",
+			url : getContextPath()+"/shoppingCart/",
 			type : 'GET',
 			dataType : 'json',
 			async : true,
@@ -59,7 +59,7 @@
 		});
 	}
 	function readInstrumentsByIds(items, callback) {
-		var url = "/musicshop_adm/instrument?";
+		var url = getContextPath()+"/instrument?";
 		var r = null;
 		Object.keys(items).forEach(function(key) {
 			url = url + '&ids=' + key;
@@ -91,6 +91,10 @@
 		
 		addToCart(field.id, field.value);
 		loadShoppingCart();
+	}
+	function getContextPath() {
+		return window.location.pathname.substring(0, window.location.pathname
+				.indexOf("/", 2));
 	}
 </script>
 <meta charset="ISO-8859-1">

@@ -2,20 +2,13 @@ package com.musicshop.order;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.musicshop.instrument.Instrument;
 import com.musicshop.instrument.InstrumentDao;
 import com.musicshop.shoppingcart.ShoppingCart;
@@ -26,20 +19,20 @@ public class OrderController {
 
 	private ShoppingCart shoppingCart;
 	private InstrumentDao instrumentDao;
-	private Session session;
+	private JavaMailSender javaMailSender;
 
 	@Autowired
-	public OrderController(ShoppingCart shoppingCart, Session session, InstrumentDao instrumentDao) {
+	public OrderController(ShoppingCart shoppingCart, JavaMailSender javaMailSender, InstrumentDao instrumentDao) {
 		this.shoppingCart = shoppingCart;
-		this.session = session;
+		this.javaMailSender = javaMailSender;
 		this.instrumentDao=instrumentDao;
 	}
 
 	@RequestMapping()
 	public String makeOrder() throws MessagingException {
 
-		List<Instrument> instruments=readInstrumentsByIds(shoppingCart.getItems().keySet());
-		MimeMessage mimeMessage = new MimeMessage(session);
+		List<Instrument> instruments=instrumentDao.readByIds(new ArrayList<Integer>(shoppingCart.getItems().keySet()));
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
 		String[] receivers = { "ijankovic47@gmail.com"};
 
@@ -53,14 +46,8 @@ public class OrderController {
 		helper.setFrom("ivancemusicshop@gmail.com");
 		helper.setSubject("Instruments order list");
 		mimeMessage.setContent(content, "text/html");
-		Transport.send(mimeMessage);
+		javaMailSender.send(mimeMessage);
 
 		return "redirect:/";
-	}
-	
-	private List<Instrument> readInstrumentsByIds(Set<Integer> ids){
-		
-		List<Instrument> instruments=instrumentDao.readByIds(new ArrayList(ids));
-		return instruments;
 	}
 }
