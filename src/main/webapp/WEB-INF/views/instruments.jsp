@@ -19,7 +19,7 @@
 		data[item] = amount;
 		$
 				.ajax({
-					url : "http://192.168.1.12:8080/musicshop_adm/shoppingCart/"
+					url : getContextPath()+"/shoppingCart/"
 							+ item,
 					type : 'PUT',
 					dataType : 'json',
@@ -42,7 +42,7 @@
 	}
 	function loadItems(callBack) {
 		$.ajax({
-			url : "http://192.168.1.12:8080/musicshop_adm/shoppingCart/",
+			url : getContextPath()+"/shoppingCart/",
 			type : 'GET',
 			dataType : 'json',
 			async : true,
@@ -64,7 +64,7 @@
 		});
 	}
 	function readInstrumentsByIds(items, callback) {
-		var url = "/musicshop_adm/instrument?";
+		var url = getContextPath()+"/instrument?";
 		Object.keys(items).forEach(function(key) {
 			url = url + '&ids=' + key;
 		});
@@ -106,7 +106,7 @@
 	
 	function removeItemFromCart(id){
 		$.ajax({
-			url : "http://192.168.1.12:8080/musicshop_adm/shoppingCart/"+id,
+			url : getContextPath()+"/shoppingCart/"+id,
 			type : 'DELETE',
 			//dataType : 'json',
 			async : true,
@@ -121,6 +121,10 @@
 			}
 
 		});
+	}
+	function getContextPath() {
+		return window.location.pathname.substring(0, window.location.pathname
+				.indexOf("/", 2));
 	}
 </script>
 <title>Instruments</title>
