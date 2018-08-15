@@ -2,8 +2,6 @@ package com.musicshop.instrument;
 
 import java.util.List;
 
-import com.musicshop.property.Property;
-
 public class Instrument {
 
 	private Integer id;
