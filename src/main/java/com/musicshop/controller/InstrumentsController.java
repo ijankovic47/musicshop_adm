@@ -87,33 +87,33 @@ public class InstrumentsController {
 			return "instruments";
 		}
 		if (propertyId != null) {
-			model.addAttribute("brands", brandDao.read(null, null, propertyId, priceMin, priceMax));
+			model.addAttribute("brands", brandDao.read(null, null, propertyId, priceMin, priceMax, true));
 			return "instruments";
 		}
 		if (typeId != null && brandId != null) {
-			model.addAttribute("properties", propertyDao.read(typeId, brandId, priceMin, priceMax));
+			model.addAttribute("properties", propertyDao.read(typeId, brandId, priceMin, priceMax, true));
 			return "instruments";
 		}
 		if (typeId != null) {
-			model.addAttribute("properties", propertyDao.read(typeId, null, priceMin, priceMax));
+			model.addAttribute("properties", propertyDao.read(typeId, null, priceMin, priceMax, true));
 			model.addAttribute("brands",
-					brandDao.read(null, typeId, null, priceMin, priceMax));
+					brandDao.read(null, typeId, null, priceMin, priceMax, true));
 			return "instruments";
 		}
 		if (familyId != null && brandId != null) {
 			model.addAttribute("types",
-					typeDao.read(familyId, brandId, priceMin, priceMax));
+					typeDao.read(familyId, brandId, priceMin, priceMax, true));
 			return "instruments";
 		}
 		if (familyId != null) {
 			model.addAttribute("types",
-					typeDao.read(familyId, brandId, priceMin, priceMax));
+					typeDao.read(familyId, brandId, priceMin, priceMax, true));
 			model.addAttribute("brands",
-					brandDao.read(familyId, null, null, priceMin, priceMax));
+					brandDao.read(familyId, null, null, priceMin, priceMax, true));
 			return "instruments";
 		}
 		if (brandId != null) {
-			model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax));
+			model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, true));
 			return "instruments";
 		}
 		return "instruments";

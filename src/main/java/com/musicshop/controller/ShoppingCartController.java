@@ -18,24 +18,28 @@ import com.musicshop.shoppingcart.ShoppingCart;
 public class ShoppingCartController {
 
 	private ShoppingCart shoppingCart;
-	
+
 	@Autowired
 	public ShoppingCartController(ShoppingCart shoppingCart) {
-		this.shoppingCart=shoppingCart;
+		this.shoppingCart = shoppingCart;
 	}
+
 	@RequestMapping()
 	public ResponseEntity<?> getShoppingCart() throws JsonProcessingException {
 		return ResponseEntity.ok(new ObjectMapper().writeValueAsString(shoppingCart.getItems()));
 	}
-	
-	@RequestMapping(value="/{itemId}", method=RequestMethod.PUT)
-	public ResponseEntity<?> addToCart(@PathVariable("itemId") String itemId, @RequestBody Map<Integer, Integer> itemAmount) throws JsonProcessingException {
-		shoppingCart.addItem(itemAmount.entrySet().iterator().next().getKey(),itemAmount.entrySet().iterator().next().getValue());
+
+	@RequestMapping(value = "/{itemId}", method = RequestMethod.PUT)
+	public ResponseEntity<?> addToCart(@PathVariable("itemId") String itemId,
+			@RequestBody Map<Integer, Integer> itemAmount) throws JsonProcessingException {
+		shoppingCart.addItem(itemAmount.entrySet().iterator().next().getKey(),
+				itemAmount.entrySet().iterator().next().getValue());
 		return ResponseEntity.ok(new ObjectMapper().writeValueAsString(shoppingCart.getItems()));
 	}
-	@RequestMapping(value="/{itemId}", method=RequestMethod.DELETE)
+
+	@RequestMapping(value = "/{itemId}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removeFromCart(@PathVariable("itemId") Integer itemId) throws JsonProcessingException {
-		
+
 		shoppingCart.removeItem(itemId);
 		return ResponseEntity.ok(new ObjectMapper().writeValueAsString(shoppingCart.getItems()));
 	}

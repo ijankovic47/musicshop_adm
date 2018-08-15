@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.musicshop.brand.BrandDao;
 import com.musicshop.family.FamilyDao;
-import com.musicshop.instrument.Instrument;
 
 @Controller
 @RequestMapping("/")
@@ -14,19 +13,19 @@ public class HomeController {
 
 	private FamilyDao familyDao;
 	private BrandDao brandDao;
-	
+
 	@Autowired
 	public HomeController(FamilyDao familyDao, BrandDao brandDao) {
-		this.familyDao=familyDao;
-		this.brandDao=brandDao;
+		this.familyDao = familyDao;
+		this.brandDao = brandDao;
 	}
-	
+
 	@RequestMapping()
 	public String goHome(Model model) {
-		
-		model.addAttribute("families",familyDao.readAll());
-		model.addAttribute("brands", brandDao.readAll());
-		model.addAttribute("instrument", new Instrument());
+
+		model.addAttribute("families", familyDao.read(null, null, null, true));
+		model.addAttribute("brands", brandDao.read(null, null, null, null, null, true));
+
 		return "home";
 	}
 }

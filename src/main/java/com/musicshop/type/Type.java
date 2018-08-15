@@ -6,6 +6,7 @@ public class Type {
 	private String name;
 	private String image;
 	private Integer instrumentCount;
+	private Integer familyId;
 	
 	public Integer getId() {
 		return id;
@@ -30,6 +31,12 @@ public class Type {
 	}
 	public void setInstrumentCount(Integer instrumentCount) {
 		this.instrumentCount = instrumentCount;
+	}
+	public Integer getFamilyId() {
+		return familyId;
+	}
+	public void setFamilyId(Integer familyId) {
+		this.familyId = familyId;
 	}
 	
 }

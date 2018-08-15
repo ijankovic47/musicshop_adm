@@ -15,10 +15,12 @@ public class PropertyDaoImpl extends GenericDaoImpl<Property, Integer> implement
 	}
 
 	@Override
-	public List<Property> read(Integer typeId, Integer brandId, Integer priceMin, Integer priceMax) {
+	public List<Property> read(Integer typeId, Integer brandId, Integer priceMin, Integer priceMax,
+			boolean havingInstruments) {
 
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("typeId", typeId)
-				.queryParam("brandId", brandId).queryParam("priceMin", priceMin).queryParam("priceMax", priceMax);
+				.queryParam("brandId", brandId).queryParam("priceMin", priceMin).queryParam("priceMax", priceMax)
+				.queryParam("havingInstruments", havingInstruments);
 		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Property[].class);
 		Property[] result = (Property[]) response.getBody();
 

@@ -17,10 +17,11 @@ public class FamilyDaoImpl extends GenericDaoImpl<Family, Integer> implements Fa
 	}
 
 	@Override
-	public List<Family> read(Integer brandId, Integer priceMin, Integer priceMax) {
+	public List<Family> read(Integer brandId, Integer priceMin, Integer priceMax, boolean havingInstruments) {
 
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString())
-				.queryParam("brandId", brandId).queryParam("priceMin", priceMin).queryParam("priceMax", priceMax);
+				.queryParam("brandId", brandId).queryParam("priceMin", priceMin).queryParam("priceMax", priceMax)
+				.queryParam("havingInstruments", havingInstruments);
 		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Family[].class);
 		Family[] result = (Family[]) response.getBody();
 

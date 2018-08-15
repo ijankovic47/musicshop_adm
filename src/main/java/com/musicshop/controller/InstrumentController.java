@@ -41,6 +41,6 @@ public class InstrumentController {
 	public String createInstrument(@ModelAttribute Instrument instrument) {
 		
 		instrumentDao.saveEntity(instrument);
-		return "redirect:/";
+		return "redirect:/admin";
 	}
 }

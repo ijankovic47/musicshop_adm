@@ -191,6 +191,7 @@
 		</c:forEach>
 	</ol>
 	<div id="shoppingCart"></div>
+	<a href="<c:url value='/order'/>">Order</a>
 	<script type="text/javascript">
 		loadShoppingCart();
 	</script>

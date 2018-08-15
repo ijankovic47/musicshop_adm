@@ -17,11 +17,13 @@ public class BrandDaoImpl extends GenericDaoImpl<Brand, Integer> implements Bran
 	}
 
 	@Override
-	public List<Brand> read(Integer familyId, Integer typeId, Integer propertyId, Integer priceMin, Integer priceMax) {
+	public List<Brand> read(Integer familyId, Integer typeId, Integer propertyId, Integer priceMin, Integer priceMax,
+			boolean havingInstruments) {
 
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString())
 				.queryParam("familyId", familyId).queryParam("typeId", typeId).queryParam("propertyId", propertyId)
-				.queryParam("priceMin", priceMin).queryParam("priceMax", priceMax);
+				.queryParam("priceMin", priceMin).queryParam("priceMax", priceMax)
+				.queryParam("havingInstruments", havingInstruments);
 		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Brand[].class);
 		Brand[] result = (Brand[]) response.getBody();
 
