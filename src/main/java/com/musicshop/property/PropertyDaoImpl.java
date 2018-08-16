@@ -15,7 +15,7 @@ public class PropertyDaoImpl extends GenericDaoImpl<Property, Integer> implement
 	}
 
 	@Override
-	public List<Property> read(Integer typeId, Integer brandId, Integer priceMin, Integer priceMax,
+	public List<Property> read(Integer typeId, Integer brandId, Double priceMin, Double priceMax,
 			boolean havingInstruments) {
 
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString()).queryParam("typeId", typeId)

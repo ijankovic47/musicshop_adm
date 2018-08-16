@@ -16,7 +16,7 @@ public class InstrumentDaoImpl extends GenericDaoImpl<Instrument, Integer> imple
 
 	@Override
 	public List<Instrument> read(Integer familyId, Integer typeId, Integer propertyId, Integer brandId,
-			Integer pageSize, Integer pageNumber, Integer priceMin, Integer priceMax) {
+			Integer pageSize, Integer pageNumber, Double priceMin, Double priceMax) {
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString())
 				.queryParam("familyId", familyId).queryParam("typeId", typeId).queryParam("propertyId", propertyId)
 				.queryParam("brandId", brandId).queryParam("pageSize", pageSize).queryParam("pageNumber", pageNumber)
@@ -28,8 +28,8 @@ public class InstrumentDaoImpl extends GenericDaoImpl<Instrument, Integer> imple
 	}
 
 	@Override
-	public List<Double> prices(Integer familyId, Integer typeId, Integer propertyId, Integer brandId, Integer priceMin,
-			Integer priceMax) {
+	public List<Double> prices(Integer familyId, Integer typeId, Integer propertyId, Integer brandId, Double priceMin,
+			Double priceMax) {
 
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString()).path("/count")
 				.queryParam("familyId", familyId).queryParam("typeId", typeId).queryParam("propertyId", propertyId)

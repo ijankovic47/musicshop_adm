@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.musicshop.brand.BrandDao;
-import com.musicshop.currency.CurrencyDao;
+import com.musicshop.currency.CurrencyService;
 import com.musicshop.family.FamilyDao;
 import com.musicshop.instrument.Instrument;
 import com.musicshop.instrument.InstrumentDao;
@@ -25,17 +25,17 @@ public class InstrumentsController {
 	private TypeDao typeDao;
 	private PropertyDao propertyDao;
 	private InstrumentDao instrumentDao;
-	private CurrencyDao currencyDao;
+	private CurrencyService currencyService;
 
 	@Autowired
 	public InstrumentsController(FamilyDao familyDao, BrandDao brandDao, TypeDao typeDao, PropertyDao propertyDao,
-			InstrumentDao instrumentDao, CurrencyDao currencyDao) {
+			InstrumentDao instrumentDao, CurrencyService currencyService) {
 		this.familyDao = familyDao;
 		this.brandDao = brandDao;
 		this.typeDao = typeDao;
 		this.propertyDao = propertyDao;
 		this.instrumentDao = instrumentDao;
-		this.currencyDao = currencyDao;
+		this.currencyService = currencyService;
 	}
 
 	@RequestMapping
@@ -45,9 +45,10 @@ public class InstrumentsController {
 			@RequestParam(name = "brandId", required = false) Integer brandId,
 			@RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize,
 			@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
-			@RequestParam(name = "priceMin", required = false) Integer priceMin,
-			@RequestParam(name = "priceMax", required = false) Integer priceMax, Model model) {
+			@RequestParam(name = "priceMin", required = false) Double priceMin,
+			@RequestParam(name = "priceMax", required = false) Double priceMax, Model model) {
 
+		
 		String paginationUrl = "&pageSize=" + pageSize + (familyId != null ? "&familyId=" + familyId : "")
 				+ (typeId != null ? "&typeId=" + typeId : "") + (propertyId != null ? "&propertyId=" + propertyId : "")
 				+ (brandId != null ? "&brandId=" + brandId : "") + (priceMin != null ? "&priceMin=" + priceMin : "")
@@ -60,12 +61,17 @@ public class InstrumentsController {
 				+ (priceMin != null ? "&priceMin=" + priceMin : "") + (priceMax != null ? "&priceMax=" + priceMax : "");
 
 		model.addAttribute("paginationUrl", paginationUrl);
-		double RSDforEUR = currencyDao.getRSDforEUR();
-		priceMin = EURtoRSD(priceMin, RSDforEUR);
-		priceMax = EURtoRSD(priceMax, RSDforEUR);
+		
+		
+		priceMin = currencyService.EURtoRSD(priceMin);
+		priceMax = currencyService.EURtoRSD(priceMax);
+		
+		
 		List<Instrument> instruments = instrumentDao.read(familyId, typeId, propertyId, brandId, pageSize, pageNumber,
 				priceMin, priceMax);
 		model.addAttribute("instruments", instruments);
+		
+		
 		List<Double> instrumentPrices = instrumentDao.prices(familyId, typeId, propertyId, brandId,
 				priceMin, priceMax);
 
@@ -119,13 +125,13 @@ public class InstrumentsController {
 		return "instruments";
 	}
 
+	
 	private Map<Integer, Integer> createPriceGroups(List<Double> instrumentPrices) {
 
-		double RSDforEUR = currencyDao.getRSDforEUR();
 		Map<Integer, Integer> priceCount = new LinkedHashMap<Integer, Integer>();
 
 		for (Double price : instrumentPrices) {
-			sortPriceRanges(priceCount, price / RSDforEUR, 100);
+			sortPriceRanges(priceCount, currencyService.RSDtoEUR(price), 100);
 		}
 		return priceCount;
 	}
@@ -148,12 +154,5 @@ public class InstrumentsController {
 			}
 			sortPriceRanges(priceCount, instrumentPrice, breakingAmount);
 		}
-	}
-
-	private Integer EURtoRSD(Integer priceEUR, Double RSDforEUR) {
-		if (priceEUR == null) {
-			return null;
-		}
-		return (int) (priceEUR * RSDforEUR);
 	}
 }

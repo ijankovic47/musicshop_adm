@@ -17,7 +17,7 @@ public class FamilyDaoImpl extends GenericDaoImpl<Family, Integer> implements Fa
 	}
 
 	@Override
-	public List<Family> read(Integer brandId, Integer priceMin, Integer priceMax, boolean havingInstruments) {
+	public List<Family> read(Integer brandId, Double priceMin, Double priceMax, boolean havingInstruments) {
 
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString())
 				.queryParam("brandId", brandId).queryParam("priceMin", priceMin).queryParam("priceMax", priceMax)
