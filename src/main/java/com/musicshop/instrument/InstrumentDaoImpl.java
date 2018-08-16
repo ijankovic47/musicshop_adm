@@ -16,11 +16,11 @@ public class InstrumentDaoImpl extends GenericDaoImpl<Instrument, Integer> imple
 
 	@Override
 	public List<Instrument> read(Integer familyId, Integer typeId, Integer propertyId, Integer brandId,
-			Integer pageSize, Integer pageNumber, Double priceMin, Double priceMax) {
+			Integer pageSize, Integer pageNumber, Double priceMin, Double priceMax, InstrumentSort sort) {
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString())
 				.queryParam("familyId", familyId).queryParam("typeId", typeId).queryParam("propertyId", propertyId)
 				.queryParam("brandId", brandId).queryParam("pageSize", pageSize).queryParam("pageNumber", pageNumber)
-				.queryParam("priceMin", priceMin).queryParam("priceMax", priceMax);
+				.queryParam("priceMin", priceMin).queryParam("priceMax", priceMax).queryParam("sort", sort!=null?sort.name():null);
 		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Instrument[].class);
 		Instrument[] instruments = (Instrument[]) response.getBody();
 
@@ -42,8 +42,8 @@ public class InstrumentDaoImpl extends GenericDaoImpl<Instrument, Integer> imple
 
 	@Override
 	public Instrument readById(Integer id) {
-	
-		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString()).path("/"+id);
+
+		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString()).path("/" + id);
 		ResponseEntity<Instrument> response = restTemplate.getForEntity(uri.toUriString(), Instrument.class);
 		Instrument instrument = response.getBody();
 		return instrument;
@@ -51,9 +51,9 @@ public class InstrumentDaoImpl extends GenericDaoImpl<Instrument, Integer> imple
 
 	@Override
 	public List<Instrument> readByIds(List<Integer> ids) {
-		
+
 		UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(buildURI().toString());
-		for(Integer id:ids) {
+		for (Integer id : ids) {
 			uri.queryParam("ids", id);
 		}
 		ResponseEntity<?> response = restTemplate.getForEntity(uri.toUriString(), Instrument[].class);
