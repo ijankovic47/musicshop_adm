@@ -13,6 +13,7 @@ import com.musicshop.currency.CurrencyService;
 import com.musicshop.family.FamilyDao;
 import com.musicshop.instrument.Instrument;
 import com.musicshop.instrument.InstrumentDao;
+import com.musicshop.instrument.InstrumentSort;
 import com.musicshop.property.PropertyDao;
 import com.musicshop.type.TypeDao;
 
@@ -46,28 +47,33 @@ public class InstrumentsController {
 			@RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize,
 			@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
 			@RequestParam(name = "priceMin", required = false) Double priceMin,
-			@RequestParam(name = "priceMax", required = false) Double priceMax, Model model) {
+			@RequestParam(name = "priceMax", required = false) Double priceMax,
+			@RequestParam(name = "sort", required = false) InstrumentSort sort, Model model) {
 
-		
 		String treeFilter = (familyId != null ? "&familyId=" + familyId : "")
 				+ (typeId != null ? "&typeId=" + typeId : "") + (propertyId != null ? "&propertyId=" + propertyId : "");
 		String pricesFilter = (priceMin != null ? "&priceMin=" + priceMin : "")
 				+ (priceMax != null ? "&priceMax=" + priceMax : "");
 		String brandFilter = (brandId != null ? "&brandId=" + brandId : "");
 		String pageSizeFilter = "&pageSize=" + pageSize;
-		
-		model.addAttribute("paginationFilter", pageSizeFilter + treeFilter + brandFilter + pricesFilter);
-		model.addAttribute("pageSizeFilter", treeFilter + brandFilter + pricesFilter);
-		model.addAttribute("treefilter", brandFilter + pricesFilter + pageSizeFilter);
+		String sortFilter = (sort!=null?"&sort=" + sort:"");
+		String pageNumberFilter = "&pageNumber=" + pageNumber;
+
+		model.addAttribute("paginationFilter", pageSizeFilter + treeFilter + brandFilter + pricesFilter + sortFilter);
+		model.addAttribute("pageSizeFilter", treeFilter + brandFilter + pricesFilter + sortFilter);
+		model.addAttribute("treefilter", brandFilter + pricesFilter + pageSizeFilter + sortFilter);
+		model.addAttribute("brandFilter", treeFilter + pricesFilter + pageSizeFilter + sortFilter);
+		model.addAttribute("sortFilter", treeFilter + brandFilter + pricesFilter + pageSizeFilter + pageNumberFilter);
+
 		model.addAttribute("pageSize", pageSize);
-		model.addAttribute("brandFilter", treeFilter + pricesFilter + pageSizeFilter);
 		model.addAttribute("page", pageNumber);
+		model.addAttribute("sort", sort);
 
 		priceMin = currencyService.EURtoRSD(priceMin);
 		priceMax = currencyService.EURtoRSD(priceMax);
 
 		List<Instrument> instruments = instrumentDao.read(familyId, typeId, propertyId, brandId, pageSize, pageNumber,
-				priceMin, priceMax);
+				priceMin, priceMax, sort);
 		model.addAttribute("instruments", instruments);
 
 		List<Double> instrumentPrices = instrumentDao.prices(familyId, typeId, propertyId, brandId, priceMin, priceMax);
@@ -76,7 +82,7 @@ public class InstrumentsController {
 			Map<Integer, Integer> priceGroups = createPriceGroups(instrumentPrices);
 			model.addAttribute("priceGroups", priceGroups);
 		}
-		
+
 		int instrumentCount = instrumentPrices.size();
 		model.addAttribute("pages", calculateTotalPages(instrumentCount, pageSize));
 
@@ -112,9 +118,6 @@ public class InstrumentsController {
 		return "instruments";
 	}
 
-	
-	
-	
 	private Map<Integer, Integer> createPriceGroups(List<Double> instrumentPrices) {
 
 		Map<Integer, Integer> priceCount = new LinkedHashMap<Integer, Integer>();
@@ -144,9 +147,9 @@ public class InstrumentsController {
 			sortPriceRanges(priceCount, instrumentPrice, breakingAmount);
 		}
 	}
-	
+
 	private int calculateTotalPages(int instrumentCount, int pageSize) {
 		int pages = (int) Math.ceil((double) instrumentCount / (double) pageSize);
-		return pages<1?1:pages;
+		return pages < 1 ? 1 : pages;
 	}
 }

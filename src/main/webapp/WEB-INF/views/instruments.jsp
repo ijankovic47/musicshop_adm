@@ -17,32 +17,30 @@
 	function addToCart(item, amount) {
 		var data = {};
 		data[item] = amount;
-		$
-				.ajax({
-					url : getContextPath()+"/shoppingCart/"
-							+ item,
-					type : 'PUT',
-					dataType : 'json',
-					async : true,
-					data : JSON.stringify(data),
-					contentType : 'application/json; charset=utf-8',
-					success : function(data) {
-						loadShoppingCart();
-					},
-					error : function(er, st, msg) {
-						console.log(er);
-						console.log(st);
-						console.log(msg);
-					}
+		$.ajax({
+			url : getContextPath() + "/shoppingCart/" + item,
+			type : 'PUT',
+			dataType : 'json',
+			async : true,
+			data : JSON.stringify(data),
+			contentType : 'application/json; charset=utf-8',
+			success : function(data) {
+				loadShoppingCart();
+			},
+			error : function(er, st, msg) {
+				console.log(er);
+				console.log(st);
+				console.log(msg);
+			}
 
-				});
+		});
 	}
 	function loadShoppingCart() {
 		loadItems(readInstrumentsByIds);
 	}
 	function loadItems(callBack) {
 		$.ajax({
-			url : getContextPath()+"/shoppingCart/",
+			url : getContextPath() + "/shoppingCart/",
 			type : 'GET',
 			dataType : 'json',
 			async : true,
@@ -50,8 +48,7 @@
 			success : function(data) {
 				if (Object.keys(data).length) {
 					callBack(data, initShoppingCartForm);
-				}
-				else{
+				} else {
 					$("#shoppingCart").html("");
 				}
 			},
@@ -64,7 +61,7 @@
 		});
 	}
 	function readInstrumentsByIds(items, callback) {
-		var url = getContextPath()+"/instrument?";
+		var url = getContextPath() + "/instrument?";
 		Object.keys(items).forEach(function(key) {
 			url = url + '&ids=' + key;
 		});
@@ -91,7 +88,8 @@
 					+ "'/>"
 					+ items[instruments[i].id]
 					* instruments[i].price
-					+ "<button onclick='removeItemFromCart("+instruments[i].id+")'>remove</button></li>";
+					+ "<button onclick='removeItemFromCart("
+					+ instruments[i].id + ")'>remove</button></li>";
 			totalPrice += items[instruments[i].id] * instruments[i].price;
 		}
 		outHTML += "</ol> Total price: " + totalPrice;
@@ -103,14 +101,12 @@
 		addToCart(field.id, field.value);
 		loadShoppingCart();
 	}
-	
-	function removeItemFromCart(id){
+
+	function removeItemFromCart(id) {
 		$.ajax({
-			url : getContextPath()+"/shoppingCart/"+id,
+			url : getContextPath() + "/shoppingCart/" + id,
 			type : 'DELETE',
-			//dataType : 'json',
 			async : true,
-			//contentType : 'text/plain; charset=utf-8',
 			success : function(data) {
 				loadShoppingCart();
 			},
@@ -165,14 +161,17 @@
 		<c:forEach items="${instruments}" var="instrument">
 			<li><a href="<c:url value='/instrument/${instrument.id}'/>">${instrument.name}
 					(${instrument.price})</a><img src="${instrument.images[0]}"
-				style="height: 100px; width: 100px"></li><button onclick='addToCart("${instrument.id}","1")'>Add to cart</button>
+				style="height: 100px; width: 100px"></li>
+			<button onclick='addToCart("${instrument.id}","1")'>Add to
+				cart</button>
 		</c:forEach>
 	</ol>
 
 	<ol>
 		<c:forEach begin="1" end="${pages}" step="1" varStatus="i">
 			<li><a
-				href="<c:url value='/instruments?pageNumber=${i.index}${paginationFilter}'/>" ${page==i.index?'style="color: red"':''}>${i.index}</a></li>
+				href="<c:url value='/instruments?pageNumber=${i.index}${paginationFilter}'/>"
+				${page==i.index?'style="color: red"':''}>${i.index}</a></li>
 		</c:forEach>
 	</ol>
 	<ol>
@@ -199,12 +198,38 @@
 	<script type="text/javascript">
 		loadShoppingCart();
 	</script>
-<select onChange="window.location.href=this.value">
-    <option value="<c:url value='/instruments?pageSize=1${pageSizeFilter}'/>" ${pageSize==1?'selected':''}>1</option>
-    <option value="<c:url value='/instruments?pageSize=2${pageSizeFilter}'/>" ${pageSize==2?'selected':''}>2</option>
-    <option value="<c:url value='/instruments?pageSize=3${pageSizeFilter}'/>" ${pageSize==3?'selected':''}>3</option>
-    <option value="<c:url value='/instruments?pageSize=4${pageSizeFilter}'/>" ${pageSize==4?'selected':''}>4</option>
-    <option value="<c:url value='/instruments?pageSize=5${pageSizeFilter}'/>" ${pageSize==5?'selected':''}>5</option>
-</select>
+	<select onChange="window.location.href=this.value">
+		<option
+			value="<c:url value='/instruments?pageSize=1${pageSizeFilter}'/>"
+			${pageSize==1?'selected':''}>1</option>
+		<option
+			value="<c:url value='/instruments?pageSize=2${pageSizeFilter}'/>"
+			${pageSize==2?'selected':''}>2</option>
+		<option
+			value="<c:url value='/instruments?pageSize=3${pageSizeFilter}'/>"
+			${pageSize==3?'selected':''}>3</option>
+		<option
+			value="<c:url value='/instruments?pageSize=4${pageSizeFilter}'/>"
+			${pageSize==4?'selected':''}>4</option>
+		<option
+			value="<c:url value='/instruments?pageSize=5${pageSizeFilter}'/>"
+			${pageSize==5?'selected':''}>5</option>
+	</select>
+
+	<select onChange="window.location.href=this.value">
+		<option disabled value="0">-- select sort --</option>
+		<option
+			value="<c:url value='/instruments?sort=nameASC${sortFilter}'/>"
+			${sort=='nameASC'?'selected':''}>Instrument name asc</option>
+		<option
+			value="<c:url value='/instruments?sort=nameDESC${sortFilter}'/>"
+			${sort=='nameDESC'?'selected':''}>Instrument name desc</option>
+		<option
+			value="<c:url value='/instruments?sort=priceASC${sortFilter}'/>"
+			${sort=='priceASC'?'selected':''}>Instrument price acs</option>
+		<option
+			value="<c:url value='/instruments?sort=priceDESC${sortFilter}'/>"
+			${sort=='priceDESC'?'selected':''}>Instrument price desc</option>
+	</select>
 </body>
 </html>
