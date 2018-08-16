@@ -49,45 +49,36 @@ public class InstrumentsController {
 			@RequestParam(name = "priceMax", required = false) Double priceMax, Model model) {
 
 		
-		String paginationUrl = "&pageSize=" + pageSize + (familyId != null ? "&familyId=" + familyId : "")
-				+ (typeId != null ? "&typeId=" + typeId : "") + (propertyId != null ? "&propertyId=" + propertyId : "")
-				+ (brandId != null ? "&brandId=" + brandId : "") + (priceMin != null ? "&priceMin=" + priceMin : "")
-				+ (priceMax != null ? "&priceMax=" + priceMax : "");
+		String treeFilter = (familyId != null ? "&familyId=" + familyId : "")
+				+ (typeId != null ? "&typeId=" + typeId : "") + (propertyId != null ? "&propertyId=" + propertyId : "");
 		String pricesFilter = (priceMin != null ? "&priceMin=" + priceMin : "")
 				+ (priceMax != null ? "&priceMax=" + priceMax : "");
 		String brandFilter = (brandId != null ? "&brandId=" + brandId : "");
-		String filterForBrand = (familyId != null ? "&familyId=" + familyId : "")
-				+ (typeId != null ? "&typeId=" + typeId : "") + (propertyId != null ? "&propertyId=" + propertyId : "")
-				+ (priceMin != null ? "&priceMin=" + priceMin : "") + (priceMax != null ? "&priceMax=" + priceMax : "");
+		String pageSizeFilter = "&pageSize=" + pageSize;
+		
+		model.addAttribute("paginationFilter", pageSizeFilter + treeFilter + brandFilter + pricesFilter);
+		model.addAttribute("pageSizeFilter", treeFilter + brandFilter + pricesFilter);
+		model.addAttribute("treefilter", brandFilter + pricesFilter + pageSizeFilter);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("brandFilter", treeFilter + pricesFilter + pageSizeFilter);
+		model.addAttribute("page", pageNumber);
 
-		model.addAttribute("paginationUrl", paginationUrl);
-		
-		
 		priceMin = currencyService.EURtoRSD(priceMin);
 		priceMax = currencyService.EURtoRSD(priceMax);
-		
-		
+
 		List<Instrument> instruments = instrumentDao.read(familyId, typeId, propertyId, brandId, pageSize, pageNumber,
 				priceMin, priceMax);
 		model.addAttribute("instruments", instruments);
-		
-		
-		List<Double> instrumentPrices = instrumentDao.prices(familyId, typeId, propertyId, brandId,
-				priceMin, priceMax);
+
+		List<Double> instrumentPrices = instrumentDao.prices(familyId, typeId, propertyId, brandId, priceMin, priceMax);
 
 		if (priceMin == null && priceMax == null) {
 			Map<Integer, Integer> priceGroups = createPriceGroups(instrumentPrices);
 			model.addAttribute("priceGroups", priceGroups);
 		}
+		
 		int instrumentCount = instrumentPrices.size();
-		int pages = 1;
-		if (instrumentCount > 0) {
-			pages = (int) Math.ceil((double) instrumentCount / (double) pageSize);
-		}
-
-		model.addAttribute("pages", pages);
-		model.addAttribute("filter", brandFilter + pricesFilter);
-		model.addAttribute("brandFilter", filterForBrand);
+		model.addAttribute("pages", calculateTotalPages(instrumentCount, pageSize));
 
 		if (propertyId != null && brandId != null) {
 			return "instruments";
@@ -102,20 +93,16 @@ public class InstrumentsController {
 		}
 		if (typeId != null) {
 			model.addAttribute("properties", propertyDao.read(typeId, null, priceMin, priceMax, true));
-			model.addAttribute("brands",
-					brandDao.read(null, typeId, null, priceMin, priceMax, true));
+			model.addAttribute("brands", brandDao.read(null, typeId, null, priceMin, priceMax, true));
 			return "instruments";
 		}
 		if (familyId != null && brandId != null) {
-			model.addAttribute("types",
-					typeDao.read(familyId, brandId, priceMin, priceMax, true));
+			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, true));
 			return "instruments";
 		}
 		if (familyId != null) {
-			model.addAttribute("types",
-					typeDao.read(familyId, brandId, priceMin, priceMax, true));
-			model.addAttribute("brands",
-					brandDao.read(familyId, null, null, priceMin, priceMax, true));
+			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, true));
+			model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, true));
 			return "instruments";
 		}
 		if (brandId != null) {
@@ -125,6 +112,8 @@ public class InstrumentsController {
 		return "instruments";
 	}
 
+	
+	
 	
 	private Map<Integer, Integer> createPriceGroups(List<Double> instrumentPrices) {
 
@@ -154,5 +143,10 @@ public class InstrumentsController {
 			}
 			sortPriceRanges(priceCount, instrumentPrice, breakingAmount);
 		}
+	}
+	
+	private int calculateTotalPages(int instrumentCount, int pageSize) {
+		int pages = (int) Math.ceil((double) instrumentCount / (double) pageSize);
+		return pages<1?1:pages;
 	}
 }
