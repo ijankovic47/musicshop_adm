@@ -6,11 +6,15 @@
 <html>
 <head>
 <script type="text/javascript"
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+	
+</script>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
 <script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+	
+</script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
 <meta charset="ISO-8859-1">
@@ -50,7 +54,8 @@
 				if (Object.keys(data).length) {
 					callBack(data, initShoppingCartForm);
 				} else {
-					$("#shoppingCart").html("");
+					$("#shoppingCart").text("Shopping cart is empty !");
+					$("#cartItemCount").html("0");
 				}
 			},
 			error : function(er, st, msg) {
@@ -94,8 +99,10 @@
 			totalPrice += items[instruments[i].id] * instruments[i].price;
 		}
 		outHTML += "</ol> Total price: " + totalPrice;
+		outHTML += '<a href="<c:url value='/order'/>">Order</a>';
 
 		$("#shoppingCart").html(outHTML);
+		$("#cartItemCount").html(instruments.length);
 	}
 	function updateShoppingCart(field) {
 
@@ -126,6 +133,14 @@
 	function hover(element, src) {
 		element.setAttribute('src', src);
 	}
+	$(document).ready(function() {
+		$('.popup').popup();
+		$('.shopping.cart.icon').popup({
+			position : 'bottom left',
+			popup : $('.popup'),
+			on : 'click'
+		});
+	});
 </script>
 <style type="text/css">
 body {
@@ -184,37 +199,51 @@ select {
 		<div class="ui eleven wide column" style="background-color: white;">
 			<div class="row"
 				style="background-color: #3e4356; margin-bottom: 10px;">
-				<div style="color: red; overflow: hidden;">
-					<span style="float: right;">cart my profile sign up sign in</span>
+				<div style="color: #ccc; overflow: hidden;">
+					<span style="float: right;"><i class="shopping cart icon "></i>(<span
+						id="cartItemCount"></span>)</span>
+					<div id="shoppingCart"
+						class="ui popup"></div>
 				</div>
+				<script type="text/javascript">
+					loadShoppingCart();
+				</script>
 				<div>
-					<img src="http://www.mitrosmusic.com/images/logo.jpg" /> <a href="<c:url value='/instruments?familyId=1'/>"><img
+					<img src="http://www.mitrosmusic.com/images/logo.jpg" /> <a
+						href="<c:url value='/instruments?familyId=1'/>"><img
 						src="http://www.mitrosmusic.com/images/header_pics/1.png"
 						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/1a.png')"
 						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/1.png')"></a>
-					<a href="<c:url value='/instruments?familyId=1'/>"><img 
+					<a href="<c:url value='/instruments?familyId=1'/>"><img
 						src="http://www.mitrosmusic.com/images/header_pics/2.png"
 						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/2a.png')"
 						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/2.png')"></a>
-					<a href="<c:url value='/instruments?familyId=2'/>"><img src="http://www.mitrosmusic.com/images/header_pics/3.png"
+					<a href="<c:url value='/instruments?familyId=2'/>"><img
+						src="http://www.mitrosmusic.com/images/header_pics/3.png"
 						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/3a.png')"
 						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/3.png')"></a>
-					<a href="<c:url value='/instruments?familyId=3'/>"><img src="http://www.mitrosmusic.com/images/header_pics/4.png"
+					<a href="<c:url value='/instruments?familyId=3'/>"><img
+						src="http://www.mitrosmusic.com/images/header_pics/4.png"
 						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/4a.png')"
 						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/4.png')"></a>
-					<a href="<c:url value='/instruments?familyId=4'/>"><img src="http://www.mitrosmusic.com/images/header_pics/5.png"
+					<a href="<c:url value='/instruments?familyId=4'/>"><img
+						src="http://www.mitrosmusic.com/images/header_pics/5.png"
 						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/5a.png')"
 						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/5.png')"></a>
-					<a href="<c:url value='/instruments?familyId=5'/>"><img src="http://www.mitrosmusic.com/images/header_pics/6.png"
+					<a href="<c:url value='/instruments?familyId=5'/>"><img
+						src="http://www.mitrosmusic.com/images/header_pics/6.png"
 						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/6a.png')"
 						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/6.png')"></a>
-					<a href="<c:url value='/instruments?familyId=6'/>"><img src="http://www.mitrosmusic.com/images/header_pics/7.png"
+					<a href="<c:url value='/instruments?familyId=6'/>"><img
+						src="http://www.mitrosmusic.com/images/header_pics/7.png"
 						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/7a.png')"
 						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/7.png')"></a>
-					<a href="<c:url value='/instruments?familyId=7'/>"><img src="http://www.mitrosmusic.com/images/header_pics/8.png"
+					<a href="<c:url value='/instruments?familyId=7'/>"><img
+						src="http://www.mitrosmusic.com/images/header_pics/8.png"
 						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/8a.png')"
 						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/8.png')"></a>
 				</div>
+
 			</div>
 			<div class="ui grid">
 
@@ -364,19 +393,14 @@ select {
 														pattern="#,##0" value="${instrument.price}" /> RSD</span>
 											</p>
 											<a onclick='addToCart("${instrument.id}","1")'><img
-												src="http://www.mitrosmusic.com/images/korpa_mala.jpg" /></a>
+												src="http://www.pngmart.com/files/3/Add-To-Cart-Button-PNG-Pic.png"
+												style="height: 30px; width: 100px;" /></a>
 										</div>
 									</div>
 								</div>
 							</div>
 						</c:forEach>
 					</div>
-
-					<div id="shoppingCart"></div>
-					<a href="<c:url value='/order'/>">Order</a>
-					<script type="text/javascript">
-						loadShoppingCart();
-					</script>
 				</div>
 			</div>
 		</div>
