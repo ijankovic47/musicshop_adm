@@ -10,6 +10,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -22,6 +23,7 @@ import com.musicshop.shoppingcart.ShoppingCart;
 @EnableWebMvc
 @ComponentScan("com.musicshop")
 @PropertySource({ "classpath:connections.properties" })
+@EnableScheduling
 public class RootContextConfiguration implements WebMvcConfigurer {
 
 	@Autowired

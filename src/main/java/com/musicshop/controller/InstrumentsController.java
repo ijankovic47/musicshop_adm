@@ -84,6 +84,7 @@ public class InstrumentsController {
 		}
 
 		int instrumentCount = instrumentPrices.size();
+		model.addAttribute("instrumentCount", instrumentCount);
 		model.addAttribute("pages", calculateTotalPages(instrumentCount, pageSize));
 
 		if (propertyId != null && brandId != null) {
