@@ -116,6 +116,9 @@ public class InstrumentsController {
 			model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, true));
 			return "instruments";
 		}
+		    model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, true));
+		    model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, true));
+		    
 		return "instruments";
 	}
 

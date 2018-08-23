@@ -1,0 +1,82 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		var phones = [];
+
+		phones[0] = "Novi Sad 021 / 450 800";
+		phones[1] = "Nis 018 / 250 670";
+		phones[2] = "Beograd 011 / 76 17 668";
+		var i = 0;
+		setInterval(function() {
+			if (i < phones.length) {
+				$("#phone").text(phones[i]);
+				i++;
+			} else {
+				i = 0;
+				$("#phone").text(phones[i]);
+				i++;
+			}
+			$('#phone').transition({
+				animation : 'tada',
+				duration : '2`s'
+			});
+		}, 5000);
+		$('#phone').transition({
+			animation : 'tada',
+			duration : '2`s'
+		});
+	});
+	
+	function hover(element, src) {
+		element.setAttribute('src', src);
+	}
+</script>
+<div
+	style="background-color: #3e4356; margin-bottom: 10px; overflow: hidden;">
+	<div class="ui shoppingCart modal" style="padding: 10px;"></div>
+	<div>
+		<div style="float: left; text-align: center;">
+			<a href="<c:url value='/'/>"><img
+				src="http://www.mitrosmusic.com/images/logo.jpg" />
+				<p id="phone">Beograd 011 / 76 17 668</p></a>
+		</div>
+		<a href="<c:url value='/instruments?familyId=1'/>"><img
+			src="http://www.mitrosmusic.com/images/header_pics/1.png"
+			onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/1a.png')"
+			onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/1.png')"></a>
+		<a href="<c:url value='/instruments?familyId=1'/>"><img
+			src="http://www.mitrosmusic.com/images/header_pics/2.png"
+			onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/2a.png')"
+			onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/2.png')"></a>
+		<a href="<c:url value='/instruments?familyId=2'/>"><img
+			src="http://www.mitrosmusic.com/images/header_pics/3.png"
+			onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/3a.png')"
+			onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/3.png')"></a>
+		<a href="<c:url value='/instruments?familyId=3'/>"><img
+			src="http://www.mitrosmusic.com/images/header_pics/4.png"
+			onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/4a.png')"
+			onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/4.png')"></a>
+		<a href="<c:url value='/instruments?familyId=4'/>"><img
+			src="http://www.mitrosmusic.com/images/header_pics/5.png"
+			onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/5a.png')"
+			onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/5.png')"></a>
+		<a href="<c:url value='/instruments?familyId=5'/>"><img
+			src="http://www.mitrosmusic.com/images/header_pics/6.png"
+			onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/6a.png')"
+			onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/6.png')"></a>
+		<a href="<c:url value='/instruments?familyId=6'/>"><img
+			src="http://www.mitrosmusic.com/images/header_pics/7.png"
+			onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/7a.png')"
+			onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/7.png')"></a>
+		<a href="<c:url value='/instruments?familyId=7'/>"><img
+			src="http://www.mitrosmusic.com/images/header_pics/8.png"
+			onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/8a.png')"
+			onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/8.png')"></a>
+	</div>
+	<div>
+		<div class="ui two item menu">
+			<a class="item" href="<c:url value='/'/>">Home</a> <a class="item">Brands</a>
+		</div>
+	</div>
+
+
+</div>

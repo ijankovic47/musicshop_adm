@@ -1,3 +1,4 @@
+<%@page import="com.fasterxml.jackson.annotation.JsonInclude.Include"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -17,179 +18,14 @@
 </script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
+
+<script type="text/javascript" src="<c:url value='/resources/js/shoppingCart.js' />"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/instruments.js' />"></script>
 <meta charset="ISO-8859-1">
-<script type="text/javascript">
-	function addToCart(item, amount) {
-		var data = {};
-		data[item] = amount;
-		$.ajax({
-			url : getContextPath() + "/shoppingCart/" + item,
-			type : 'PUT',
-			dataType : 'json',
-			async : true,
-			data : JSON.stringify(data),
-			contentType : 'application/json; charset=utf-8',
-			success : function(data) {
-				loadShoppingCart();
-			},
-			error : function(er, st, msg) {
-				console.log(er);
-				console.log(st);
-				console.log(msg);
-			}
-
-		});
-	}
-	function loadShoppingCart() {
-		loadItems(readInstrumentsByIds);
-	}
-	function loadItems(callBack) {
-		$.ajax({
-			url : getContextPath() + "/shoppingCart/",
-			type : 'GET',
-			dataType : 'json',
-			async : true,
-			contentType : 'text/plain; charset=utf-8',
-			success : function(data) {
-				if (Object.keys(data).length) {
-					callBack(data, initShoppingCartForm);
-				} else {
-					$("#shoppingCart").text("Shopping cart is empty !");
-					$("#cartItemCount").html("0");
-				}
-			},
-			error : function(er, st, msg) {
-				console.log(er);
-				console.log(st);
-				console.log(msg);
-			}
-
-		});
-	}
-	function readInstrumentsByIds(items, callback) {
-		var url = getContextPath() + "/instrument?";
-		Object.keys(items).forEach(function(key) {
-			url = url + '&ids=' + key;
-		});
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				callback(items, JSON.parse(xhttp.responseText));
-			}
-		};
-		xhttp.open("GET", url, true);
-		xhttp.send();
-	}
-	function initShoppingCartForm(items, instruments) {
-
-		var outHTML = "<ol>";
-		var totalPrice = 0;
-		for (i = 0; i < instruments.length; i++) {
-			outHTML += "<li><img src='"+instruments[i].images[0]+"' style='height:50px;width:50px;'/>"
-					+ instruments[i].name
-					+ "<input onfocusout='updateShoppingCart(this)' id="
-					+ instruments[i].id
-					+ " value='"
-					+ items[instruments[i].id]
-					+ "'/>"
-					+ items[instruments[i].id]
-					* instruments[i].price
-					+ "<button onclick='removeItemFromCart("
-					+ instruments[i].id + ")'>remove</button></li>";
-			totalPrice += items[instruments[i].id] * instruments[i].price;
-		}
-		outHTML += "</ol> Total price: " + totalPrice;
-		outHTML += '<a href="<c:url value='/order'/>">Order</a>';
-
-		$("#shoppingCart").html(outHTML);
-		$("#cartItemCount").html(instruments.length);
-	}
-	function updateShoppingCart(field) {
-
-		addToCart(field.id, field.value);
-		loadShoppingCart();
-	}
-
-	function removeItemFromCart(id) {
-		$.ajax({
-			url : getContextPath() + "/shoppingCart/" + id,
-			type : 'DELETE',
-			async : true,
-			success : function(data) {
-				loadShoppingCart();
-			},
-			error : function(er, st, msg) {
-				console.log(er);
-				console.log(st);
-				console.log(msg);
-			}
-
-		});
-	}
-	function getContextPath() {
-		return window.location.pathname.substring(0, window.location.pathname
-				.indexOf("/", 2));
-	}
-	function hover(element, src) {
-		element.setAttribute('src', src);
-	}
-	$(document).ready(function() {
-		$('.popup').popup();
-		$('.shopping.cart.icon').popup({
-			position : 'bottom left',
-			popup : $('.popup'),
-			on : 'click'
-		});
-	});
-</script>
-<style type="text/css">
-body {
-	font-family: cursive;
-	color: #3e4356;
-}
-
-.list.header {
-	text-align: center;
-	color: white;
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
-	background-image:
-		url('http://www.mitrosmusic.com/images/title_bar_center.gif');
-	padding: 5px;
-	background-color: #3d4255;
-}
-
-.link.list {
-	text-align: center;
-	margin-top: 0px;
-	border: 1px solid;
-	border-color: #f0f0f0;
-	font-family: sans-serif;
-	font-size: 12px;
-}
-
-.item {
-	background-image: url('http://www.mitrosmusic.com/images/bg_link.gif');
-	background-color: #f0f0f0;
-	border-bottom: 1px solid;
-	padding: 4px;
-	background-position: top;
-	background-repeat: repeat-x;
-}
-
-.header {
-	background-image: url('http://www.mitrosmusic.com/images/bg_link.gif');
-	background-position: top;
-	background-repeat: repeat-x;
-	background-color: #f0f0f0;
-	border: 1px solid;
-	border-color: #f0f0f0;
-}
-
-select {
-	color: #3e4356;
-}
-</style>
+ <script type="text/javascript"> 
+ 
+</script> 
+<link href="<c:url value="/resources/css/style.css" />" rel="stylesheet">
 <title>Instruments</title>
 </head>
 <body
@@ -197,54 +33,9 @@ select {
 
 	<div class="ui centered grid">
 		<div class="ui eleven wide column" style="background-color: white;">
-			<div class="row"
-				style="background-color: #3e4356; margin-bottom: 10px;">
-				<div style="color: #ccc; overflow: hidden;">
-					<span style="float: right;"><i class="shopping cart icon "></i>(<span
-						id="cartItemCount"></span>)</span>
-					<div id="shoppingCart"
-						class="ui popup"></div>
-				</div>
-				<script type="text/javascript">
-					loadShoppingCart();
-				</script>
-				<div>
-					<img src="http://www.mitrosmusic.com/images/logo.jpg" /> <a
-						href="<c:url value='/instruments?familyId=1'/>"><img
-						src="http://www.mitrosmusic.com/images/header_pics/1.png"
-						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/1a.png')"
-						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/1.png')"></a>
-					<a href="<c:url value='/instruments?familyId=1'/>"><img
-						src="http://www.mitrosmusic.com/images/header_pics/2.png"
-						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/2a.png')"
-						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/2.png')"></a>
-					<a href="<c:url value='/instruments?familyId=2'/>"><img
-						src="http://www.mitrosmusic.com/images/header_pics/3.png"
-						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/3a.png')"
-						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/3.png')"></a>
-					<a href="<c:url value='/instruments?familyId=3'/>"><img
-						src="http://www.mitrosmusic.com/images/header_pics/4.png"
-						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/4a.png')"
-						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/4.png')"></a>
-					<a href="<c:url value='/instruments?familyId=4'/>"><img
-						src="http://www.mitrosmusic.com/images/header_pics/5.png"
-						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/5a.png')"
-						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/5.png')"></a>
-					<a href="<c:url value='/instruments?familyId=5'/>"><img
-						src="http://www.mitrosmusic.com/images/header_pics/6.png"
-						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/6a.png')"
-						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/6.png')"></a>
-					<a href="<c:url value='/instruments?familyId=6'/>"><img
-						src="http://www.mitrosmusic.com/images/header_pics/7.png"
-						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/7a.png')"
-						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/7.png')"></a>
-					<a href="<c:url value='/instruments?familyId=7'/>"><img
-						src="http://www.mitrosmusic.com/images/header_pics/8.png"
-						onmouseover="hover(this, 'http://www.mitrosmusic.com/images/header_pics/8a.png')"
-						onmouseleave="hover(this, 'http://www.mitrosmusic.com/images/header_pics/8.png')"></a>
-				</div>
 
-			</div>
+			<%@include file="header.html"%>
+
 			<div class="ui grid">
 
 				<div class="three wide column">
@@ -321,7 +112,7 @@ select {
 					</c:if>
 				</div>
 
-				<div class="thirteen wide column">
+				<div class="eleven wide column">
 					<div class="list header">
 						<span style="float: left;">shown ${pageSize*(page-1)+1} -
 							${pageSize*page>instrumentCount?instrumentCount:pageSize*page}
@@ -400,6 +191,14 @@ select {
 								</div>
 							</div>
 						</c:forEach>
+					</div>
+				</div>
+				<div class="ui rail one wide column">
+					<div style="color: #ccc; overflow: hidden;" id="sc"
+						class="ui sticky">
+						<span style="float: right;"><img class="ui tiny image"
+							src='https://toppng.com/public/uploads/preview/shopping-cart-11530997194yfsujos9lt.png'
+							onclick="showCart()"></img>(<span id="cartItemCount"></span>)</span>
 					</div>
 				</div>
 			</div>

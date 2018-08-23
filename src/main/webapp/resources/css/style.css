@@ -1,0 +1,58 @@
+<style type="text/css">
+body {
+	font-family: cursive;
+	color: #3e4356;
+}
+
+.list.header {
+	text-align: center;
+	color: white;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	background-image:
+		url('http://www.mitrosmusic.com/images/title_bar_center.gif');
+	padding: 5px;
+	background-color: #3d4255;
+}
+
+.link.list {
+	text-align: center;
+	margin-top: 0px;
+	border: 1px solid;
+	border-color: #f0f0f0;
+	font-family: sans-serif;
+	font-size: 12px;
+}
+
+.list .item {
+	background-image: url('http://www.mitrosmusic.com/images/bg_link.gif');
+	background-color: #f0f0f0;
+	border-bottom: 1px solid;
+	padding: 4px;
+	background-position: top;
+	background-repeat: repeat-x;
+}
+
+.ui.menu .item {
+	background-image: url('http://www.mitrosmusic.com/images/gray_bg.gif');
+	background-color: #3D4255;
+	border-bottom: 1px solid;
+	padding: 4px;
+	background-position: top;
+	background-repeat: repeat-x;
+	color: white;
+}
+
+.header {
+	background-image: url('http://www.mitrosmusic.com/images/bg_link.gif');
+	background-position: top;
+	background-repeat: repeat-x;
+	background-color: #f0f0f0;
+	border: 1px solid;
+	border-color: #f0f0f0;
+}
+
+select {
+	color: #3e4356;
+}
+</style>
