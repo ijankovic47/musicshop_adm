@@ -25,7 +25,7 @@
  <script type="text/javascript"> 
  
 </script> 
-<link href="<c:url value="/resources/css/style.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/favicon.ico" />" rel="shortcut icon" >
 <title>Instruments</title>
 </head>
 <body

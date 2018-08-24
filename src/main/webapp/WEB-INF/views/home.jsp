@@ -18,7 +18,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
 <meta charset="ISO-8859-1">
-<link href="<c:url value="/resources/css/style.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/favicon.ico" />" rel="shortcut icon" >
 <title>Home</title>
 </head>
 <body
@@ -105,7 +105,8 @@
 					</c:if>
 				</div>
 
-				<div class="thirteen wide column"></div>
+				<div class="thirteen wide column">
+				</div>
 			</div>
 		</div>
 	</div>
