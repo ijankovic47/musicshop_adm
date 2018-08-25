@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.musicshop.brand.BrandDao;
+import com.musicshop.brand.BrandSort;
 import com.musicshop.family.FamilyDao;
 
 @Controller
@@ -24,7 +25,7 @@ public class HomeController {
 	public String goHome(Model model) {
 
 		model.addAttribute("families", familyDao.read(null, null, null, true));
-		model.addAttribute("brands", brandDao.read(null, null, null, null, null, true));
+		model.addAttribute("brands", brandDao.read(null, null, null, null, null, true, BrandSort.instrumentCountDESC));
 
 		return "home";
 	}

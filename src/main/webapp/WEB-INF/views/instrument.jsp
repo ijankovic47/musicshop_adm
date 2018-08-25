@@ -70,7 +70,7 @@
 								<div style="float: right">
 									<div style="color: #ccc; overflow: hidden;" id="sc">
 										<span style="float: right;"><img class="ui tiny image"
-											src='https://topFpng.com/public/uploads/preview/shopping-cart-11530997194yfsujos9lt.png'
+											src='https://toppng.com/public/uploads/preview/shopping-cart-11530997194yfsujos9lt.png'
 											onclick="showCart()"></img>(<span id="cartItemCount"></span>)</span>
 									</div>
 								</div>

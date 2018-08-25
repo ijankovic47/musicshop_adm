@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.musicshop.brand.BrandDao;
+import com.musicshop.brand.BrandSort;
 import com.musicshop.currency.CurrencyService;
 import com.musicshop.family.FamilyDao;
 import com.musicshop.instrument.Instrument;
@@ -91,7 +92,7 @@ public class InstrumentsController {
 			return "instruments";
 		}
 		if (propertyId != null) {
-			model.addAttribute("brands", brandDao.read(null, null, propertyId, priceMin, priceMax, true));
+			model.addAttribute("brands", brandDao.read(null, null, propertyId, priceMin, priceMax, true, BrandSort.instrumentCountDESC));
 			return "instruments";
 		}
 		if (typeId != null && brandId != null) {
@@ -100,7 +101,7 @@ public class InstrumentsController {
 		}
 		if (typeId != null) {
 			model.addAttribute("properties", propertyDao.read(typeId, null, priceMin, priceMax, true));
-			model.addAttribute("brands", brandDao.read(null, typeId, null, priceMin, priceMax, true));
+			model.addAttribute("brands", brandDao.read(null, typeId, null, priceMin, priceMax, true, BrandSort.instrumentCountDESC));
 			return "instruments";
 		}
 		if (familyId != null && brandId != null) {
@@ -109,7 +110,7 @@ public class InstrumentsController {
 		}
 		if (familyId != null) {
 			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, true));
-			model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, true));
+			model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, true, BrandSort.instrumentCountDESC));
 			return "instruments";
 		}
 		if (brandId != null) {
@@ -117,7 +118,7 @@ public class InstrumentsController {
 			return "instruments";
 		}
 		    model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, true));
-		    model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, true));
+		    model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, true, BrandSort.instrumentCountDESC));
 		    
 		return "instruments";
 	}
