@@ -24,8 +24,8 @@ public class HomeController {
 	@RequestMapping()
 	public String goHome(Model model) {
 
-		model.addAttribute("families", familyDao.read(null, null, null, true));
-		model.addAttribute("brands", brandDao.read(null, null, null, null, null, true, BrandSort.instrumentCountDESC));
+		model.addAttribute("families", familyDao.read(null, null, null, false));
+		model.addAttribute("brands", brandDao.read(null, null, null, null, null, false, BrandSort.instrumentCountDESC));
 
 		return "home";
 	}

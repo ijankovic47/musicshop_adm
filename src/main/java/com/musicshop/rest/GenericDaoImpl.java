@@ -4,10 +4,6 @@ import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -38,13 +34,10 @@ public abstract class GenericDaoImpl<T, PK> implements GenericDao<T, PK> {
 	}
 
 	@Override
-	public void saveEntity(T entity) {
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<T> requestEntity = new HttpEntity<>(entity, headers);
-
-		ResponseEntity<String> out = restTemplate.exchange(buildURI(), HttpMethod.POST, requestEntity, String.class);
-
+	public T readById(PK id) {
+	
+		ResponseEntity<?> response = restTemplate.getForEntity(buildURI()+"/"+id, type);
+		T result =  (T) response.getBody();
+		return result;
 	}
 }

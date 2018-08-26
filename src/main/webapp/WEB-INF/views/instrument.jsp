@@ -21,14 +21,22 @@
 	src="<c:url value='/resources/js/shoppingCart.js' />"></script>
 <script type="text/javascript"
 	src="<c:url value='/resources/js/instrument.js' />"></script>
+<script type="text/javascript"
+	src="<c:url value='/resources/js/family.js' />"></script>
+<script type="text/javascript"
+	src="<c:url value='/resources/js/type.js' />"></script>
+<script type="text/javascript"
+	src="<c:url value='/resources/js/property.js' />"></script>
+<script type="text/javascript"
+	src="<c:url value='/resources/js/brand.js' />"></script>
 <title>Instrument</title>
 </head>
 <body
-	style="background-image: url('http://www.powerpointhintergrund.com/uploads/2017/07/rap-background-music-rap-music-background-30.jpeg'); background-position: top;">
+	style="background-image: url('http://www.seekgif.com/uploads/2017/07/rap-background-music-rap-music-background-30.jpeg'); background-position: top; background-repeat: repeat-y;">
 	<div class="ui centered grid">
 		<div class="ui eleven wide column" style="background-color: white;">
 
-			<%@include file="header.html"%>
+			<%@include file="html/header.html"%>
 
 			<div class="ui grid">
 				<div class="sixteen wide column">
@@ -58,10 +66,14 @@
 						<div class="nine wide column">
 							<div class="header" style="overflow: hidden;">
 								<div style="float: left;">
-										<p style="font-size: large;">
-											price: <span style="color: red"><fmt:formatNumber
-													pattern="#,##0" value="${instrument.price}" /> RSD</span>
-										</p>
+									<p style="font-size: large;">
+										price: <span style="color: red"><fmt:formatNumber
+												pattern="#,##0" value="${instrument.price}" /> RSD</span>
+									</p>
+									<div>
+										<i class="edit icon"
+											onclick="startEditInstrument(${instrument.id})"></i>
+									</div>
 									<a onclick='addToCart("${instrument.id}","1")'><img
 										src="http://www.pngmart.com/files/3/Add-To-Cart-Button-PNG-Pic.png"
 										style="height: 30px; width: 100px;" /></a>
@@ -79,6 +91,7 @@
 
 						</div>
 					</div>
+					<%@include file="html/instrumentForm.html"%>
 				</div>
 			</div>
 		</div>

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -51,7 +52,9 @@ public class RootContextConfiguration implements WebMvcConfigurer {
 
 	@Bean
 	public RestTemplate getRestTemplate() {
-		return new RestTemplate();
+		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		RestTemplate restTemplate=new RestTemplate(requestFactory);
+		return restTemplate;
 	}
 
 	@Bean

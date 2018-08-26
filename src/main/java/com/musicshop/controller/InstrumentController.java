@@ -37,10 +37,4 @@ public class InstrumentController {
 	public List<Instrument> readByIds(@RequestParam("ids") List<Integer> ids){
 		return instrumentDao.readByIds(ids);
 	}
-	@RequestMapping(method=RequestMethod.POST, consumes="application/json", headers= "content-type=application/x-www-form-urlencoded")
-	public String createInstrument(@ModelAttribute Instrument instrument) {
-		
-		instrumentDao.saveEntity(instrument);
-		return "redirect:/admin";
-	}
 }
