@@ -1,7 +1,11 @@
-<style type="text/css">
+<style type ="text/css">
 body {
 	font-family: cursive;
 	color: #3e4356;
+	background-image:
+		url('http://www.seekgif.com/uploads/2017/07/rap-background-music-rap-music-background-30.jpeg');
+	background-position: top;
+	background-repeat: no-repeat;
 }
 
 .list.header {
@@ -56,4 +60,6 @@ body {
 select {
 	color: #3e4356;
 }
-</style>
+</
+style
+>

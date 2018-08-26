@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.musicshop.brand.BrandDao;
 import com.musicshop.brand.BrandSort;
 import com.musicshop.currency.CurrencyService;
+import com.musicshop.family.Family;
 import com.musicshop.family.FamilyDao;
 import com.musicshop.instrument.Instrument;
 import com.musicshop.instrument.InstrumentDao;
@@ -79,6 +80,8 @@ public class InstrumentsController {
 
 		List<Double> instrumentPrices = instrumentDao.prices(familyId, typeId, propertyId, brandId, priceMin, priceMax);
 
+		model.addAttribute("family", new Family());
+		
 		if (priceMin == null && priceMax == null) {
 			Map<Integer, Integer> priceGroups = createPriceGroups(instrumentPrices);
 			model.addAttribute("priceGroups", priceGroups);
@@ -92,33 +95,33 @@ public class InstrumentsController {
 			return "instruments";
 		}
 		if (propertyId != null) {
-			model.addAttribute("brands", brandDao.read(null, null, propertyId, priceMin, priceMax, true, BrandSort.instrumentCountDESC));
+			model.addAttribute("brands", brandDao.read(null, null, propertyId, priceMin, priceMax, false, BrandSort.instrumentCountDESC));
 			return "instruments";
 		}
 		if (typeId != null && brandId != null) {
-			model.addAttribute("properties", propertyDao.read(typeId, brandId, priceMin, priceMax, true));
+			model.addAttribute("properties", propertyDao.read(typeId, brandId, priceMin, priceMax, false));
 			return "instruments";
 		}
 		if (typeId != null) {
-			model.addAttribute("properties", propertyDao.read(typeId, null, priceMin, priceMax, true));
-			model.addAttribute("brands", brandDao.read(null, typeId, null, priceMin, priceMax, true, BrandSort.instrumentCountDESC));
+			model.addAttribute("properties", propertyDao.read(typeId, null, priceMin, priceMax, false));
+			model.addAttribute("brands", brandDao.read(null, typeId, null, priceMin, priceMax, false, BrandSort.instrumentCountDESC));
 			return "instruments";
 		}
 		if (familyId != null && brandId != null) {
-			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, true));
+			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, false));
 			return "instruments";
 		}
 		if (familyId != null) {
-			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, true));
-			model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, true, BrandSort.instrumentCountDESC));
+			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, false));
+			model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, false, BrandSort.instrumentCountDESC));
 			return "instruments";
 		}
 		if (brandId != null) {
-			model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, true));
+			model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, false));
 			return "instruments";
 		}
-		    model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, true));
-		    model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, true, BrandSort.instrumentCountDESC));
+		    model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, false));
+		    model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, false, BrandSort.instrumentCountDESC));
 		    
 		return "instruments";
 	}

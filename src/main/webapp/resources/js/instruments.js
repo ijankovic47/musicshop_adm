@@ -5,7 +5,11 @@ $(document).ready(function() {
 	});
 	$('#sc').sticky({
 		context : '.ui.eleven.wide.column',
-		pushing : true
+		pushing : true,
+		observeChanges: false,
 	});
 });
 
+function reloadPage(){
+	window.location.reload();
+}

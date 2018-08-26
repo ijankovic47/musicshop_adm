@@ -9,6 +9,7 @@ public class Instrument {
 	private String description;
 	private Integer brandId;
 	private Integer typeId;
+	private Integer familyId;
 	private List<String> images;
 	private List<Integer> properties;
 	private String video;
@@ -68,5 +69,10 @@ public class Instrument {
 	public void setProperties(List<Integer> properties) {
 		this.properties = properties;
 	}
-	
+	public Integer getFamilyId() {
+		return familyId;
+	}
+	public void setFamilyId(Integer familyId) {
+		this.familyId = familyId;
+	}
 }
