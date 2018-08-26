@@ -46,11 +46,11 @@ public class InstrumentsController {
 			@RequestParam(name = "typeId", required = false) Integer typeId,
 			@RequestParam(name = "propertyId", required = false) Integer propertyId,
 			@RequestParam(name = "brandId", required = false) Integer brandId,
-			@RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize,
+			@RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize,
 			@RequestParam(name = "pageNumber", defaultValue = "1") Integer pageNumber,
 			@RequestParam(name = "priceMin", required = false) Double priceMin,
 			@RequestParam(name = "priceMax", required = false) Double priceMax,
-			@RequestParam(name = "sort", required = false) InstrumentSort sort, Model model) {
+			@RequestParam(name = "sort", defaultValue="priceASC") InstrumentSort sort, Model model) {
 
 		String treeFilter = (familyId != null ? "&familyId=" + familyId : "")
 				+ (typeId != null ? "&typeId=" + typeId : "") + (propertyId != null ? "&propertyId=" + propertyId : "");

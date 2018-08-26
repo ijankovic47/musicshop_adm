@@ -17,6 +17,7 @@ function loadAPIurl() {
 	});
 }
 function readPropertiesByTypeId(typeId, callback){
+	if(typeId!=null){
 	$.ajax({
 		url : apiUrl + "/property?typeId=" + typeId,
 		type : 'GET',
@@ -28,8 +29,14 @@ function readPropertiesByTypeId(typeId, callback){
 		},
 		error : function(er, st, msg) {
 			console.log(msg);
+			
 		}
 	});
+	}
+	else{
+		var data={};
+		callback(data);
+	}
 }
 function readPropertyById(propertyId, callback) {
 

@@ -170,6 +170,7 @@ function initBrandsSelect(data) {
 	$.each(data, function() {
 		$dropdown.append($("<option />").val(this.id).text(this.name));
 	});
+	loadTypesSelect($("#familySelect").val());
 }
 function initTypesSelect(data) {
 	var $dropdown = $("#typeSelect");

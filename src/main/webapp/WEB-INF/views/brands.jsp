@@ -21,12 +21,12 @@
 	rel="shortcut icon">
 <script type="text/javascript"
 	src="<c:url value='/resources/js/brands.js' />"></script>
-	<script type="text/javascript"
+<script type="text/javascript"
 	src="<c:url value='/resources/js/brand.js' />"></script>
 <title>Brands</title>
 </head>
 <body
-	style="background-image: url('http://www.seekgif.com/uploads/2017/07/rap-background-music-rap-music-background-30.jpeg'); background-position: top;  background-repeat: repeat-y;">
+	style="background-image: url('http://www.seekgif.com/uploads/2017/07/rap-background-music-rap-music-background-30.jpeg'); background-position: top; background-repeat: repeat-y;">
 
 	<div class="ui centered grid">
 		<div class="ui eleven wide column" style="background-color: white;">
@@ -53,12 +53,11 @@
 				<c:forEach items="${brands}" var="brand">
 					<div class="item">
 						<div class="ui small image">
-							<a href="<c:url value='/brand/${brand.id}'/>"><img
-								src="${brand.image}"></a>
+							<img src="${brand.image}">
 						</div>
 						<div class="content">
 							<div class="header">
-								<a href="<c:url value='/brand/${brand.id}'/>">${brand.name}</a>
+								${brand.name}
 							</div>
 
 							<div class="description">
