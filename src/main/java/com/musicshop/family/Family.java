@@ -5,6 +5,7 @@ public class Family {
 	private Integer id;
 	private String name;
 	private Integer instrumentCount;
+	private Integer typeCount;
 	
 	public Integer getId() {
 		return id;
@@ -23,6 +24,12 @@ public class Family {
 	}
 	public void setInstrumentCount(Integer instrumentCount) {
 		this.instrumentCount = instrumentCount;
+	}
+	public Integer getTypeCount() {
+		return typeCount;
+	}
+	public void setTypeCount(Integer typeCount) {
+		this.typeCount = typeCount;
 	}
 	
 }

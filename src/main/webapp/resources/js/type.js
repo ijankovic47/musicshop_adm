@@ -17,19 +17,24 @@ function loadAPIurl() {
 	});
 }
 function readTypesByFamilyId(familyId, callback) {
-	$.ajax({
-		url : apiUrl + "/type?familyId=" + familyId,
-		type : 'GET',
-		dataType : 'json',
-		async : false,
-		contentType : 'application/json; charset=utf-8',
-		success : function(types) {
-			callback(types);
-		},
-		error : function(er, st, msg) {
-			console.log(msg);
-		}
-	});
+	if (familyId != null) {
+		$.ajax({
+			url : apiUrl + "/type?familyId=" + familyId,
+			type : 'GET',
+			dataType : 'json',
+			async : false,
+			contentType : 'application/json; charset=utf-8',
+			success : function(types) {
+				callback(types);
+			},
+			error : function(er, st, msg) {
+				console.log(msg);
+			}
+		});
+	} else {
+		var data = {};
+		callback(data);
+	}
 }
 function readTypeById(typeId, callback) {
 
@@ -38,6 +43,21 @@ function readTypeById(typeId, callback) {
 		type : 'GET',
 		dataType : 'json',
 		async : true,
+		contentType : 'application/json; charset=utf-8',
+		success : function(type) {
+			callback(type);
+		},
+		error : function(er, st, msg) {
+			console.log(msg);
+		}
+	});
+}
+function readTypeByPropertyId(propertyId, callback){
+	$.ajax({
+		url : apiUrl + "/type?propertyId=" + propertyId,
+		type : 'GET',
+		dataType : 'json',
+		async : false,
 		contentType : 'application/json; charset=utf-8',
 		success : function(type) {
 			callback(type);
@@ -154,7 +174,7 @@ function doCreateProperty() {
 	};
 	createProperty(property, reloadPage);
 }
-function reloadPage(){
+function reloadPage() {
 	window.location.reload();
 }
 function getContextPath() {

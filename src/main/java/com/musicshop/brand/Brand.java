@@ -6,7 +6,8 @@ public class Brand {
 	private String name;
 	private String image;
 	private Integer instrumentCount;
-
+	private Integer totalInstrumentCount;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -38,5 +39,12 @@ public class Brand {
 	public void setInstrumentCount(Integer instrumentCount) {
 		this.instrumentCount = instrumentCount;
 	}
-	
+
+	public Integer getTotalInstrumentCount() {
+		return totalInstrumentCount;
+	}
+
+	public void setTotalInstrumentCount(Integer totalInstrumentCount) {
+		this.totalInstrumentCount = totalInstrumentCount;
+	}
 }

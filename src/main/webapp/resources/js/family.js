@@ -47,6 +47,22 @@ function readFamilyById(familyId, callback) {
 		}
 	});
 }
+function readFamilyByTypeId(typeId, callback){
+	$.ajax({
+		url : apiUrl+"/family?typeId=" + typeId,
+		type : 'GET',
+		dataType : 'json',
+		async : false,
+		contentType : 'application/json; charset=utf-8',
+		success : function(family) {
+			console.log('AAAAAAAAAAAAAA'+family.id);
+			callback(family);
+		},
+		error : function(er, st, msg) {
+			console.log(msg);
+		}
+	});
+}
 function editFamily(family, callback) {
 	$.ajax({
 		url : apiUrl + "/family/" + family.id,
