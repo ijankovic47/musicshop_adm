@@ -6,6 +6,7 @@ public class Property {
 	private String name;
 	private Integer instrumentCount;
 	private Integer typeId;
+	private Integer totalInstrumentCount;
 	
 	public Integer getId() {
 		return id;
@@ -30,5 +31,11 @@ public class Property {
 	}
 	public void setTypeId(Integer typeId) {
 		this.typeId = typeId;
+	}
+	public Integer getTotalInstrumentCount() {
+		return totalInstrumentCount;
+	}
+	public void setTotalInstrumentCount(Integer totalInstrumentCount) {
+		this.totalInstrumentCount = totalInstrumentCount;
 	}
 }

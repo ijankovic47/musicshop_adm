@@ -64,10 +64,10 @@
 										${family.name} (${family.instrumentCount})</a>
 									<div>
 										<i class="edit icon" onclick="startEditFamily(${family.id})"></i>
-										<c:if test="${family.instrumentCount==0}">
-											<i class="trash alternate icon"
-												onclick="deleteFamily(${family.id})"></i>
-										</c:if>
+										<%-- 										<c:if test="${family.typeCount==0}"> --%>
+										<!-- 											<i class="trash alternate icon" -->
+										<%-- 												onclick="deleteFamily(${family.id})"></i> --%>
+										<%-- 										</c:if> --%>
 									</div>
 								</div>
 
@@ -88,10 +88,9 @@
 										${type.name} (${type.instrumentCount})</a>
 									<div>
 										<i class="edit icon" onclick="startEditType(${type.id})"></i>
-										<c:if test="${type.instrumentCount==0}">
-											<i class="trash alternate icon"
-												onclick="deleteType(${type.id})"></i>
-										</c:if>
+										<%-- 										<c:if test="${type.totalInstrumentCount==0}"> --%>
+										<%-- 											<i class="trash alternate icon"onclick="deleteType(${type.id})"></i> --%>
+										<%-- 										</c:if> --%>
 									</div>
 								</div>
 
@@ -114,7 +113,7 @@
 									<div>
 										<i class="edit icon"
 											onclick="startEditProperty(${property.id})"></i>
-										<c:if test="${property.instrumentCount==0}">
+										<c:if test="${property.totalInstrumentCount==0}">
 											<i class="trash alternate icon"
 												onclick="deleteProperty(${property.id})"></i>
 										</c:if>
@@ -137,10 +136,10 @@
 										(${brand.instrumentCount})</a>
 									<div>
 										<i class="edit icon" onclick="startEditBrand(${brand.id})"></i>
-										<c:if test="${brand.instrumentCount==0}">
-											<i class="trash alternate icon"
-												onclick="deleteBrand(${brand.id})"></i>
-										</c:if>
+										<%-- 										<c:if test="${brand.totalInstrumentCount==0}"> --%>
+										<!-- 											<i class="trash alternate icon" -->
+										<%-- 												onclick="deleteBrand(${brand.id})"></i> --%>
+										<%-- 										</c:if> --%>
 									</div>
 								</div>
 							</c:forEach>
@@ -250,8 +249,8 @@
 						<c:forEach items="${instruments}" var="instrument">
 							<div class="item">
 								<div class="ui small image">
-									<a href="<c:url value='/instrument/${instrument.id}'/>"><img
-										src="${instrument.images[0]}"></a>
+									<a href="<c:url value='/instrument/${instrument.id}'/>"><img src="${instrument.images[0]}"
+										style="max-height: 150px;"></a>
 
 								</div>
 								<div class="content">
@@ -309,11 +308,13 @@
 					<%@include file="html/instrumentForm.html"%>
 				</div>
 				<div class="ui rail one wide column">
-					<div style="color: #ccc; overflow: hidden;" id="sc"
-						class="ui sticky">
-						<span style="float: right;"><img class="ui tiny image"
-							src='https://toppng.com/public/uploads/preview/shopping-cart-11530997194yfsujos9lt.png'
-							onclick="showCart()"></img>(<span id="cartItemCount"></span>)</span>
+					<div style="color: #ccc;" id="sc" class="ui sticky">
+						<div class="ui image" style="float: right;">
+							<img
+								src='https://toppng.com/public/uploads/preview/shopping-cart-11530997194yfsujos9lt.png'
+								onclick="showCart()"></img>
+						</div>
+						(<span id="cartItemCount"></span>)
 					</div>
 				</div>
 			</div>

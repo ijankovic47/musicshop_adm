@@ -91,7 +91,7 @@ function initShoppingCartForm(items, instruments) {
 	}
 	outHTML += "</div><div style='padding:5px; overflow:hidden'>Total price: <span style='color:red'>"
 			+ totalPrice;
-	outHTML += ' RSD</span><a href="order" style="float:right"><i class="thumbs up icon massive"></i></a></div>';
+	outHTML += ' RSD</span><a href="'+getContextPath()+'/order" style="float:right"><i class="thumbs up icon massive"></i></a></div>';
 	$(".shoppingCart").html(outHTML);
 	$("#cartItemCount").html(instruments.length);
 	$('#sc').transition({

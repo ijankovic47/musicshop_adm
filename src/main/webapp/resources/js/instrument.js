@@ -38,7 +38,6 @@ function readInstrumentById(instrumentId, callback) {
 	});
 }
 function editInstrument(instrument, callback) {
-    instrument.images = instrument.images.split(" ");
 	$.ajax({
 		url : apiUrl + "/instrument/" + instrument.id,
 		type : 'PATCH',
@@ -89,8 +88,25 @@ function startEditInstrument(instrumentId) {
 function initInstrumentForm(instrument) {
 	$('#name').val(instrument.name);
 	$('#description').val(instrument.description);
-	$('#images').val(instrument.images);
-	$('#video').val(instrument.video);
+	var imgsHTML = "<div class='column'><iframe width='150' height='150' src='"
+			+ instrument.video
+			+ "' id='video'></iframe></div><div class='column'><div class='field'><label>Video: </label><input name='video' value='"
+			+ instrument.video
+			+ "' id='videoInput' onchange='updateVideo()'/></div></div>";
+	for (i = 0; i < instrument.images.length; i++) {
+		var id = generateId();
+		imgsHTML += "<div class='column'><div class='ui small image'><img src='"
+				+ instrument.images[i]
+				+ "' id='img"
+				+ id
+				+ "'/></div></div><div class='column'><div class='field'><label>Image: </label><input class='images' value='"
+				+ instrument.images[i]
+				+ "' id='imgInput"
+				+ id
+				+ "' oninput=\"updateImage('" + id + "')\"/></div></div>";
+	}
+	$('#imgs').html(imgsHTML)
+	$('#videoInput').val(instrument.video);
 	$('#price').val(instrument.price);
 	loadFamiliesSelect();
 	$("#familySelect").val(instrument.familyId);
@@ -105,12 +121,16 @@ function initInstrumentForm(instrument) {
 	$('#instrumentForm').modal('show');
 }
 function doEditInstrument(id) {
+	var imagesArray = new Array();
+	$('.images').each(function() {
+		imagesArray.push($(this).val());
+	});
 	var instrument = {
 		id : id,
 		name : $('#name').val(),
-		images : $('#images').val(),
+		images : imagesArray,
 		description : $('#description').val(),
-		video : $('#video').val(),
+		video : $('#videoInput').val(),
 		price : $('#price').val(),
 		typeId : $('#typeSelect').val(),
 		brandId : $('#brandSelect').val(),
@@ -119,28 +139,55 @@ function doEditInstrument(id) {
 	editInstrument(instrument, reloadPage);
 }
 function startCreateInstrument() {
-	$('#name').val(null);
-	$('#images').val(null);
-	$('#description').val(null);
-	$('#video').val(null);
-	$('#price').val(null);
-	$('#typeSelect').empty();
-	$('#propertySelect').empty();
+	let params = (new URL(document.location)).searchParams;
+	let familyId = params.get("familyId");
+	let typeId = params.get("typeId");
+	let propertyId = params.get("propertyId");
+	let brandId = params.get("brandId");
+	
 	loadFamiliesSelect();
+	if (familyId != null) {
+		$('#familySelect').val(familyId);
+		loadTypesSelect(familyId);
+		
+	}
+	else if(typeId!=null){
+		readFamilyByTypeId(typeId, preselectFamily);
+		$('#typeSelect').val(typeId);
+	}
+	else if(propertyId!=null){
+		readTypeByPropertyId(propertyId, preselectType);
+		$('#propertySelect').val(propertyId);
+	}
 	loadBrandsSelect();
+	if(brandId!=null){
+		$('#brandSelect').val(brandId);
+	}
+	$('#name').val(null);
+	$('#description').val(null);
+	$('#price').val(null);
+	$('#imgs')
+			.html(
+					"<div class='column'><iframe width='150' height='150' src='' id='video'></iframe></div><div class='column'><div class='field'><label>Video: </label><input name='video' id='videoInput' onchange='updateVideo()'/></div></div>")
+	
+	
 	$('#instrumentFormSubmit').attr('onclick', 'doCreateInstrument()');
 	$('#instrumentForm').modal('show');
 }
 function doCreateInstrument() {
+	var imagesArray = new Array();
+	$('.images').each(function() {
+		imagesArray.push($(this).val());
+	});
 	var instrument = {
 		name : $('#name').val(),
-		images : $('#images').val().split(" "),
+		images : imagesArray,
 		description : $('#description').val(),
-		video : $('#video').val(),
+		video : $('#videoInput').val(),
 		price : $('#price').val(),
-		properties : $('#propertySelect').val(),
 		typeId : $('#typeSelect').val(),
-		brandId : $('#brandSelect').val()
+		brandId : $('#brandSelect').val(),
+		properties : $('#propertySelect').val()
 	};
 	createInstrument(instrument, reloadPage);
 }
@@ -151,13 +198,14 @@ function loadBrandsSelect() {
 	readAllBrands(initBrandsSelect);
 }
 function loadTypesSelect(familyId) {
-
+console.log('ucitavamo tipove')
 	readTypesByFamilyId(familyId, initTypesSelect)
 }
 function initFamiliesSelect(data) {
 	var $dropdown = $("#familySelect");
 	$dropdown.empty();
-	$dropdown.append($("<option disabled selected/>").val(null).text('--select family--'));
+	$dropdown.append($("<option disabled selected/>").val(null).text(
+			'--select family--'));
 	$.each(data, function() {
 		$dropdown.append($("<option />").val(this.id).text(this.name));
 	});
@@ -166,16 +214,17 @@ function initFamiliesSelect(data) {
 function initBrandsSelect(data) {
 	var $dropdown = $("#brandSelect");
 	$dropdown.empty();
-	$dropdown.append($("<option disabled selected/>").val(null).text('--select brand--'));
+	$dropdown.append($("<option disabled selected/>").val(null).text(
+			'--select brand--'));
 	$.each(data, function() {
 		$dropdown.append($("<option />").val(this.id).text(this.name));
 	});
-	loadTypesSelect($("#familySelect").val());
 }
 function initTypesSelect(data) {
 	var $dropdown = $("#typeSelect");
 	$dropdown.empty();
-	$dropdown.append($("<option disabled selected/>").val(null).text('--select type--'));
+	$dropdown.append($("<option disabled selected/>").val(null).text(
+			'--select type--'));
 	$.each(data, function() {
 		$dropdown.append($("<option />").val(this.id).text(this.name));
 	});
@@ -193,6 +242,36 @@ function initPropertiesSelect(data) {
 		$dropdown.append($("<option />").val(this.id).text(this.name));
 	});
 }
-function reloadPage(){
+function instrumentFormAddImageInputField() {
+	var imgsHTML = $('#imgs').html();
+	var id = generateId();
+	imgsHTML += "<div class='column'><div class='ui small image'><img src=''/ id='img"
+			+ id
+			+ "'></div></div><div class='column'><div class='field'><label>Image: </label><input class='images' id='imgInput"
+			+ id + "' oninput=\"updateImage('" + id + "')\"/></div></div>";
+	$('#imgs').html(imgsHTML);
+}
+function updateImage(id) {
+	$('#img' + id).attr('src', $('#imgInput' + id).val());
+}
+function updateVideo() {
+	$('#video').prop('src', $('#videoInput').val());
+}
+function generateId() {
+	let id = Math.random().toString(36).substring(7);
+	return id;
+}
+function preselectFamily(family){
+	$('#familySelect').val(family.id);
+	loadTypesSelect(family.id);
+}
+function preselectType(type){
+	console.log(type);
+	loadTypesSelect(type.familyId);
+	$('#typeSelect').val(type.id);
+	$('#familySelect').val(type.familyId);
+	loadPropertiesSelect(type.id);
+}
+function reloadPage() {
 	window.location.reload();
 }

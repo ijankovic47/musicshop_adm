@@ -47,10 +47,10 @@
 										${family.name} (${family.instrumentCount})</a>
 									<div>
 										<i class="edit icon" onclick="startEditFamily(${family.id})"></i>
-										<c:if test="${family.instrumentCount==0}">
-											<i class="trash alternate icon"
-												onclick="deleteFamily(${family.id})"></i>
-										</c:if>
+<%-- 										<c:if test="${family.typeCount==0}"> --%>
+<!-- 											<i class="trash alternate icon" -->
+<%-- 												onclick="deleteFamily(${family.id})"></i> --%>
+<%-- 										</c:if> --%>
 									</div>
 								</div>
 
@@ -72,10 +72,10 @@
 										(${brand.instrumentCount})</a>
 									<div>
 										<i class="edit icon" onclick="startEditBrand(${brand.id})"></i>
-										<c:if test="${brand.instrumentCount==0}">
-											<i class="trash alternate icon"
-												onclick="deleteBrand(${brand.id})"></i>
-										</c:if>
+<%-- 										<c:if test="${brand.totalInstrumentCount==0}"> --%>
+<!-- 											<i class="trash alternate icon" -->
+<%-- 												onclick="deleteBrand(${brand.id})"></i> --%>
+<%-- 										</c:if> --%>
 									</div>
 								</div>
 

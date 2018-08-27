@@ -58,10 +58,12 @@
 									</c:forEach>
 								</div>
 							</div>
-							<div class="row">
-								<iframe width="420" height="315" src="${instrument.video}">
-								</iframe>
-							</div>
+							<c:if test="${instrument.video!=null}">
+								<div class="row">
+									<iframe width="420" height="315" src="${instrument.video}">
+									</iframe>
+								</div>
+							</c:if>
 						</div>
 						<div class="nine wide column">
 							<div class="header" style="overflow: hidden;">

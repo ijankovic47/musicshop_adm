@@ -7,6 +7,7 @@ public class Type {
 	private String image;
 	private Integer instrumentCount;
 	private Integer familyId;
+	private Integer totalInstrumentCount;
 	
 	public Integer getId() {
 		return id;
@@ -38,5 +39,10 @@ public class Type {
 	public void setFamilyId(Integer familyId) {
 		this.familyId = familyId;
 	}
-	
+	public Integer getTotalInstrumentCount() {
+		return totalInstrumentCount;
+	}
+	public void setTotalInstrumentCount(Integer totalInstrumentCount) {
+		this.totalInstrumentCount = totalInstrumentCount;
+	}
 }

@@ -1,16 +1,51 @@
-
 <div id="instrumentForm" class="ui fullscreen modal">
-	Name<input name="name" id="name" />
-	<textarea cols="50" name="description" id="description"></textarea>
-	Images<input type="url" name="images" id="images" multiple="multiple"></input> Video<input
-		name="video" id="video" /> Price<input name="price" id="price" />
-	Brand<select name="brandId" id="brandSelect">
-	</select> Family<select onchange="loadTypesSelect(this.value)" id="familySelect"
-		name="familyId">
-	</select> Type <select name="typeId" id="typeSelect"
-		onchange="loadPropertiesSelect(this.value)">
-		<option disabled selected value="0">-- select type --</option>
-	</select> Properties <select name="properties" id="propertySelect"
-		multiple="multiple">
-	</select> <i class="save icon" id="instrumentFormSubmit"></i>
+	<div class="ui two column grid form" style="padding: 10px;">
+		<div class="column">
+			<div class="three fields">
+				<div class="field">
+					<label>Name: </label><input name="name" id="name" />
+				</div>
+				<div class="field">
+					<label>Price: </label><input type="number" name="price" id="price" />
+				</div>
+				<div class="field">
+					<label>Family: </label><select class="ui dropdown"
+						onchange="loadTypesSelect(this.value)" id="familySelect"
+						name="familyId">
+					</select>
+				</div>
+			</div>
+			<div class="three fields">
+				<div class="field">
+					<label>Type: </label> <select name="typeId" id="typeSelect"
+						onchange="loadPropertiesSelect(this.value)">
+						<option disabled selected value="0">-- select type --</option>
+					</select>
+				</div>
+				<div class="field">
+					<label>Group: </label><select name="properties" id="propertySelect"
+						multiple="multiple">
+					</select>
+				</div>
+				<div class="field">
+					<label>Brand: </label><select name="brandId" id="brandSelect">
+					</select>
+				</div>
+			</div>
+			<div class="ui two column grid" id="imgs"></div>
+			<div style="margin-top: 10px; float: right;">
+				<i class="huge red camera icon"
+					onclick="instrumentFormAddImageInputField()"></i>
+			</div>
+		</div>
+		<div class="column">
+				<div class="field">
+					<label>Description: </label>
+					<textarea role="" name="description" id="description" rows="3"></textarea>
+					<div>
+						<i class="huge green save icon" id="instrumentFormSubmit"></i>
+					</div>
+				</div>
+		</div>
+	</div>
 </div>
