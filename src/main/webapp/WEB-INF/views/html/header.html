@@ -1,8 +1,36 @@
-<script type="text/javascript" src="<c:url value='/resources/js/header.js' />"></script>
+<script type="text/javascript"
+	src="<c:url value='/resources/js/header.js' />"></script>
 <link href="<c:url value='/resources/css/style.css'/>" rel="stylesheet">
+
+<div class="ui shoppingCart modal" style="padding: 10px;"></div>
 <div
 	style="background-color: #3e4356; margin-bottom: 10px; overflow: hidden;">
-	<div class="ui shoppingCart modal" style="padding: 10px;"></div>
+
+	<div style="padding: 10px; overflow: hidden;">
+		<div style="float: right;">
+			<c:choose>
+				<c:when test="${pageContext.request.userPrincipal!=null}">
+					<i class="user icon"></i>
+					<strong style="color: red"><sec:authentication
+							property="principal.username" /></strong>
+					<div style="float: right;">
+						<form action="<c:url value='/logout'/>" method="post"
+							class="ui form">
+							<button type="submit" id="btn-logout"
+								style="background: transparent;">
+								<i class="sign out alternate icon"></i>
+							</button>
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
+						</form>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<a href="<c:url value='/login' />">Log in</a>
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</div>
 	<div>
 		<div style="float: left; text-align: center;">
 			<a href="<c:url value='/'/>"><img
@@ -44,7 +72,8 @@
 	</div>
 	<div>
 		<div class="ui two item menu">
-			<a class="item" href="<c:url value='/'/>">Home</a> <a class="item" href="<c:url value='/brands'/>">Brands</a>
+			<a class="item" href="<c:url value='/'/>">Home</a> <a class="item"
+				href="<c:url value='/brands'/>">Brands</a>
 		</div>
 	</div>
 

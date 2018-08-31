@@ -1,6 +1,8 @@
 package com.musicshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +24,10 @@ public class BrandsController {
 	
 	@RequestMapping()
 	public String getBrands(Model model, @RequestParam(name="sort", defaultValue = "nameASC") BrandSort sort) {
-		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		boolean isAdmin=auth.getAuthorities().stream().anyMatch(r->r.getAuthority().equals("ROLE_ADMIN"));
 		model.addAttribute("sort", sort.toString());
-		model.addAttribute("brands", brandDao.read(null, null, null, null, null, false, sort));
+		model.addAttribute("brands", brandDao.read(null, null, null, null, null, !isAdmin, sort));
 		return "brands";
 	}
 }

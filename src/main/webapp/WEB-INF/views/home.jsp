@@ -2,6 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,19 +48,19 @@
 										href="<c:url value='/instruments?familyId=${family.id}${treefilter}'/>">
 										${family.name} (${family.instrumentCount})</a>
 									<div>
-										<i class="edit icon" onclick="startEditFamily(${family.id})"></i>
-<%-- 										<c:if test="${family.typeCount==0}"> --%>
-<!-- 											<i class="trash alternate icon" -->
-<%-- 												onclick="deleteFamily(${family.id})"></i> --%>
-<%-- 										</c:if> --%>
+										<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+											<i class="edit icon" onclick="startEditFamily(${family.id})"></i>
+										</sec:authorize>
 									</div>
 								</div>
 
 							</c:forEach>
-							<a class="item"> <span><i
-									class="plus square big green icon"
-									onclick="startCreateFamily()"></i></span>
-							</a>
+							<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+								<a class="item"> <span><i
+										class="plus square big green icon"
+										onclick="startCreateFamily()"></i></span>
+								</a>
+							</sec:authorize>
 						</div>
 					</c:if>
 
@@ -70,19 +72,19 @@
 									<a
 										href="<c:url value='/instruments?brandId=${brand.id}${brandFilter}'/>">${brand.name}
 										(${brand.instrumentCount})</a>
-									<div>
-										<i class="edit icon" onclick="startEditBrand(${brand.id})"></i>
-<%-- 										<c:if test="${brand.totalInstrumentCount==0}"> --%>
-<!-- 											<i class="trash alternate icon" -->
-<%-- 												onclick="deleteBrand(${brand.id})"></i> --%>
-<%-- 										</c:if> --%>
-									</div>
+									<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+										<div>
+											<i class="edit icon" onclick="startEditBrand(${brand.id})"></i>
+										</div>
+									</sec:authorize>
 								</div>
 
 							</c:forEach>
-							<a class="item"><span> <i
-									class="plus square big green icon" onclick="startCreateBrand()"></i></span>
-							</a>
+							<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+								<a class="item"><span> <i
+										class="plus square big green icon"
+										onclick="startCreateBrand()"></i></span> </a>
+							</sec:authorize>
 						</div>
 					</c:if>
 				</div>

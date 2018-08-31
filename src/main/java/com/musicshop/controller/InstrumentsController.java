@@ -4,6 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,33 +97,33 @@ public class InstrumentsController {
 			return "instruments";
 		}
 		if (propertyId != null) {
-			model.addAttribute("brands", brandDao.read(null, null, propertyId, priceMin, priceMax, false, BrandSort.instrumentCountDESC));
+			model.addAttribute("brands", brandDao.read(null, null, propertyId, priceMin, priceMax, !isAdmin(), BrandSort.instrumentCountDESC));
 			return "instruments";
 		}
 		if (typeId != null && brandId != null) {
-			model.addAttribute("properties", propertyDao.read(typeId, brandId, priceMin, priceMax, false));
+			model.addAttribute("properties", propertyDao.read(typeId, brandId, priceMin, priceMax, !isAdmin()));
 			return "instruments";
 		}
 		if (typeId != null) {
-			model.addAttribute("properties", propertyDao.read(typeId, null, priceMin, priceMax, false));
-			model.addAttribute("brands", brandDao.read(null, typeId, null, priceMin, priceMax, false, BrandSort.instrumentCountDESC));
+			model.addAttribute("properties", propertyDao.read(typeId, null, priceMin, priceMax, !isAdmin()));
+			model.addAttribute("brands", brandDao.read(null, typeId, null, priceMin, priceMax, !isAdmin(), BrandSort.instrumentCountDESC));
 			return "instruments";
 		}
 		if (familyId != null && brandId != null) {
-			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, false));
+			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, !isAdmin()));
 			return "instruments";
 		}
 		if (familyId != null) {
-			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, false));
-			model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, false, BrandSort.instrumentCountDESC));
+			model.addAttribute("types", typeDao.read(familyId, brandId, priceMin, priceMax, !isAdmin()));
+			model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, !isAdmin(), BrandSort.instrumentCountDESC));
 			return "instruments";
 		}
 		if (brandId != null) {
-			model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, false));
+			model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, !isAdmin()));
 			return "instruments";
 		}
-		    model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, false));
-		    model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, false, BrandSort.instrumentCountDESC));
+		    model.addAttribute("families", familyDao.read(brandId, priceMin, priceMax, !isAdmin()));
+		    model.addAttribute("brands", brandDao.read(familyId, null, null, priceMin, priceMax, !isAdmin(), BrandSort.instrumentCountDESC));
 		    
 		return "instruments";
 	}
@@ -159,5 +161,11 @@ public class InstrumentsController {
 	private int calculateTotalPages(int instrumentCount, int pageSize) {
 		int pages = (int) Math.ceil((double) instrumentCount / (double) pageSize);
 		return pages < 1 ? 1 : pages;
+	}
+	
+	private boolean isAdmin() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		boolean isAdmin=auth.getAuthorities().stream().anyMatch(r->r.getAuthority().equals("ROLE_ADMIN"));
+		return isAdmin;
 	}
 }

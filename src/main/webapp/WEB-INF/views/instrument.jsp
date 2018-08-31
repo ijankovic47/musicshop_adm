@@ -2,6 +2,8 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec"
+uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,13 +74,13 @@
 										price: <span style="color: red"><fmt:formatNumber
 												pattern="#,##0" value="${instrument.price}" /> RSD</span>
 									</p>
-									<div>
+									<sec:authorize access="hasAnyRole('ROLE_ADMIN')"><div>
 										<i class="edit icon"
 											onclick="startEditInstrument(${instrument.id})"></i>
-									</div>
-									<a onclick='addToCart("${instrument.id}","1")'><img
-										src="http://www.pngmart.com/files/3/Add-To-Cart-Button-PNG-Pic.png"
-										style="height: 30px; width: 100px;" /></a>
+									</div></sec:authorize>
+									<img onclick='addToCart("${instrument.id}","1")'
+												src="https://www.freeiconspng.com/uploads/cart-icon-9.png"
+												style="height: 50px; width: 50px;" />
 								</div>
 
 								<div style="float: right">

@@ -5,6 +5,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://www.springframework.org/tags/form"
 	prefix="spring"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +22,6 @@
 </script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
-
 <script type="text/javascript"
 	src="<c:url value='/resources/js/shoppingCart.js' />"></script>
 <script type="text/javascript"
@@ -41,6 +42,7 @@
 </script>
 <link href="<c:url value="/resources/favicon.ico" />"
 	rel="shortcut icon">
+	<meta charset="UTF-8">
 <title>Instruments</title>
 </head>
 <body
@@ -62,20 +64,20 @@
 									<a
 										href="<c:url value='/instruments?familyId=${family.id}${treefilter}'/>">
 										${family.name} (${family.instrumentCount})</a>
-									<div>
-										<i class="edit icon" onclick="startEditFamily(${family.id})"></i>
-										<%-- 										<c:if test="${family.typeCount==0}"> --%>
-										<!-- 											<i class="trash alternate icon" -->
-										<%-- 												onclick="deleteFamily(${family.id})"></i> --%>
-										<%-- 										</c:if> --%>
-									</div>
+									<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+										<div>
+											<i class="edit icon" onclick="startEditFamily(${family.id})"></i>
+										</div>
+									</sec:authorize>
 								</div>
 
 							</c:forEach>
-							<a class="item"> <span><i
-									class="plus square big green icon"
-									onclick="startCreateFamily()"></i></span>
-							</a>
+							<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+								<a class="item"> <span><i
+										class="plus square big green icon"
+										onclick="startCreateFamily()"></i></span>
+								</a>
+							</sec:authorize>
 						</div>
 					</c:if>
 					<c:if test="${types.size()>0}">
@@ -86,18 +88,19 @@
 									<a
 										href="<c:url value='/instruments?typeId=${type.id}${treefilter}'/>">
 										${type.name} (${type.instrumentCount})</a>
-									<div>
-										<i class="edit icon" onclick="startEditType(${type.id})"></i>
-										<%-- 										<c:if test="${type.totalInstrumentCount==0}"> --%>
-										<%-- 											<i class="trash alternate icon"onclick="deleteType(${type.id})"></i> --%>
-										<%-- 										</c:if> --%>
-									</div>
+									<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+										<div>
+											<i class="edit icon" onclick="startEditType(${type.id})"></i>
+										</div>
+									</sec:authorize>
 								</div>
 
 							</c:forEach>
-							<a class="item"><span><i
-									class="plus square big green icon"
-									onclick="startCreateType(${types[0].familyId})"></i></span> </a>
+							<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+								<a class="item"><span><i
+										class="plus square big green icon"
+										onclick="startCreateType(${types[0].familyId})"></i></span> </a>
+							</sec:authorize>
 						</div>
 					</c:if>
 
@@ -120,9 +123,11 @@
 									</div>
 								</div>
 							</c:forEach>
-							<a class="item"><span> <i
-									class="plus square big green icon"
-									onclick="startCreateProperty(${properties[0].typeId})"></i></span> </a>
+							<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+								<a class="item"><span> <i
+										class="plus square big green icon"
+										onclick="startCreateProperty(${properties[0].typeId})"></i></span> </a>
+							</sec:authorize>
 						</div>
 					</c:if>
 
@@ -134,18 +139,14 @@
 									<a
 										href="<c:url value='/instruments?brandId=${brand.id}${brandFilter}'/>">${brand.name}
 										(${brand.instrumentCount})</a>
-									<div>
+									<sec:authorize access="hasAnyRole('ROLE_ADMIN')"><div>
 										<i class="edit icon" onclick="startEditBrand(${brand.id})"></i>
-										<%-- 										<c:if test="${brand.totalInstrumentCount==0}"> --%>
-										<!-- 											<i class="trash alternate icon" -->
-										<%-- 												onclick="deleteBrand(${brand.id})"></i> --%>
-										<%-- 										</c:if> --%>
-									</div>
+									</div></sec:authorize>
 								</div>
 							</c:forEach>
-							<a class="item"><span> <i
+							<sec:authorize access="hasAnyRole('ROLE_ADMIN')"><a class="item"><span> <i
 									class="plus square big green icon" onclick="startCreateBrand()"></i></span>
-							</a>
+							</a></sec:authorize>
 						</div>
 					</c:if>
 
@@ -208,10 +209,10 @@
 										${pageSize==5?'selected':''}>5</option>
 								</select>
 							</div>
-							<div class="column">
+							<sec:authorize access="hasAnyRole('ROLE_ADMIN')"><div class="column">
 								<span><i class="plus square big green icon"
 									onclick="startCreateInstrument()"></i></span>
-							</div>
+							</div></sec:authorize>
 							<div class="column">
 								<select onChange="window.location.href=this.value">
 									<option disabled="disabled" value="0">-- select sort
@@ -249,8 +250,8 @@
 						<c:forEach items="${instruments}" var="instrument">
 							<div class="item">
 								<div class="ui small image">
-									<a href="<c:url value='/instrument/${instrument.id}'/>"><img src="${instrument.images[0]}"
-										style="max-height: 150px;"></a>
+									<a href="<c:url value='/instrument/${instrument.id}'/>"><img
+										src="${instrument.images[0]}" style="max-height: 150px;"></a>
 
 								</div>
 								<div class="content">
@@ -262,15 +263,15 @@
 										<div
 											style="float: left; width: 300px; text-overflow: ellipsis; font-size: 10px; overflow: hidden;">
 											<p
-												style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">${instrument.description}</p>
+												style="overflow: hidden; height: 40px;">${instrument.description}</p>
 											<a href="<c:url value='/instrument/${instrument.id}'/>"
 												style="font-size: 10px;">Read more</a>
-											<div>
+											<sec:authorize access="hasAnyRole('ROLE_ADMIN')"><div>
 												<i class="edit big icon"
 													onclick="startEditInstrument(${instrument.id})"></i> <i
 													class="trash alternate big icon"
 													onclick="deleteInstrument(${instrument.id})"></i>
-											</div>
+											</div></sec:authorize>
 										</div>
 
 										<div style="float: right;">
@@ -278,9 +279,9 @@
 												price: <span style="color: red"><fmt:formatNumber
 														pattern="#,##0" value="${instrument.price}" /> RSD</span>
 											</p>
-											<a onclick='addToCart("${instrument.id}","1")'><img
-												src="http://www.pngmart.com/files/3/Add-To-Cart-Button-PNG-Pic.png"
-												style="height: 30px; width: 100px;" /></a>
+											<img onclick='addToCart("${instrument.id}","1")'
+												src="https://www.freeiconspng.com/uploads/cart-icon-9.png"
+												style="height: 50px; width: 50px;" />
 										</div>
 									</div>
 								</div>

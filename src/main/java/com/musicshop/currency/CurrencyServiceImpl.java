@@ -13,7 +13,8 @@ public class CurrencyServiceImpl implements CurrencyService{
 	@Autowired
 	public CurrencyServiceImpl(CurrencyDao currencyDao) {
 		this.currencyDao=currencyDao;
-		updateCurrency();
+		this.currency=118.0;
+		//updateCurrency();
 	}
 	
 	@Override
@@ -34,7 +35,6 @@ public class CurrencyServiceImpl implements CurrencyService{
 	@Scheduled(cron="0 0 12 * * *")
 	private void updateCurrency() {
 		this.currency=currencyDao.getRSDforEUR();
-		System.out.println(currency);
 	}
 
 }

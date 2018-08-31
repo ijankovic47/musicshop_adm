@@ -1,5 +1,6 @@
 package com.musicshop.configuration;
 
+import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
@@ -7,6 +8,7 @@ import javax.servlet.ServletRegistration.Dynamic;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
 public class WebInitializer implements WebApplicationInitializer{
@@ -25,6 +27,10 @@ public class WebInitializer implements WebApplicationInitializer{
 		Dynamic dispatcher=servletContext.addServlet("dispatcher", new DispatcherServlet(webContext));
 		dispatcher.addMapping("/");
 		dispatcher.setLoadOnStartup(1);
+		
+		FilterRegistration.Dynamic filterRegistration = servletContext.addFilter("springSecurityFilterChain",
+                new DelegatingFilterProxy("springSecurityFilterChain"));
+		filterRegistration.addMappingForServletNames(null, false, "dispatcher");
 	}
 
 }

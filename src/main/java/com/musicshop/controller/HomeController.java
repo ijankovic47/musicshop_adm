@@ -1,6 +1,8 @@
 package com.musicshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +25,15 @@ public class HomeController {
 
 	@RequestMapping()
 	public String goHome(Model model) {
-
-		model.addAttribute("families", familyDao.read(null, null, null, false));
-		model.addAttribute("brands", brandDao.read(null, null, null, null, null, false, BrandSort.instrumentCountDESC));
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		boolean isAdmin=auth.getAuthorities().stream().anyMatch(r->r.getAuthority().equals("ROLE_ADMIN"));
+		model.addAttribute("families", familyDao.read(null, null, null, !isAdmin));
+		model.addAttribute("brands", brandDao.read(null, null, null, null, null, !isAdmin, BrandSort.instrumentCountDESC));
 
 		return "home";
+	}
+	@RequestMapping("/login")
+	public String logIn() {
+		return "login";
 	}
 }
