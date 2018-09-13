@@ -24,7 +24,7 @@ function updateMainImage(img) {
 function readInstrumentById(instrumentId, callback) {
 
 	$.ajax({
-		url : apiUrl + "/instrument/" + instrumentId,
+		url : apiUrl+"/instrument/"+ instrumentId,
 		type : 'GET',
 		dataType : 'json',
 		async : true,

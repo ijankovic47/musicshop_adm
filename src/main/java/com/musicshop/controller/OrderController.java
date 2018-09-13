@@ -23,7 +23,6 @@ public class OrderController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public String makeOrder() throws MessagingException {
-		System.out.println("SAljemooooo");
 		mailSendingService.sendInstrumentsOrderMail(shoppingCartService.getInstrumentToOrder());
 		shoppingCartService.clearShoppingCart();
 		return "redirect:/";
